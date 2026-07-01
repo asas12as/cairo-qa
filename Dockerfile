@@ -2,6 +2,9 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
+# Create data directory (required for DuckDB path even without volume)
+RUN mkdir -p /data
+
 # Install build deps (needed for sentence-transformers / torch)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc \

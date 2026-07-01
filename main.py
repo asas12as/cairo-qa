@@ -93,6 +93,11 @@ def main():
     ctx.memory = ConversationMemory(DATA_DIR)
 
     app = FastAPI(title="Cairo Places QA", version="1.0.0")
+
+    @app.get("/health")
+    async def health():
+        return {"status": "ok"}
+
     app.include_router(api_router)
     app.include_router(auth_router, prefix="/auth")
     app.include_router(admin_router, prefix="/admin")
