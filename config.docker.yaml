@@ -1,0 +1,14 @@
+model:
+  path: ""
+embedder:
+  model: "all-MiniLM-L6-v2"
+db:
+  path: "/data/places.duckdb"
+vector_store:
+  path: "/data/chroma_db"
+  collection: "places"
+ollama:
+  model: "gemma3:4b"
+server:
+  host: "0.0.0.0"
+  port: 8000

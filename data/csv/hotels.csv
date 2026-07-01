@@ -1,0 +1,514 @@
+name,area,location,star_rating,price_range_per_night_usd,budget_category,description
+Al Masa Hotel Nasr City,Nasr City,Nasr City Cairo,5,70-120,Mid-range,Popular Nasr City hotel with modern amenities
+Cairo Marriott Hotel & Omar Khayyam Casino,Zamalek,16 Saray El Gezira Street,5,130-220,Luxury,Luxurious hotel in historic palace with multiple dining options
+Concorde El Salam Cairo Hotel & Casino,Heliopolis,65 Abdel Hamid Badawy St,5,80-140,Upscale,Family-friendly resort with casino and pools
+Dusit Thani LakeView Cairo,New Cairo,The Lakeview El Tesseen Street,5,120-200,Luxury,Thai-inspired luxury on a lake in New Cairo
+Fairmont Nile City,Boulaq,Nile City Towers Corniche El Nil,5,124-200,Luxury,Modern luxury in Nile City complex with river views
+Four Seasons Hotel Cairo at Nile Plaza,Qasr El Nil,1089 Corniche El Nil,5,350-600,Luxury,Premier luxury with rooftop pool and award-winning dining
+Four Seasons Hotel Cairo at First Residence,Giza,35 Giza Street,5,350-645,Luxury,Luxury property in Giza with upscale shopping
+Hilton Cairo Grand Nile,Garden City,Corniche El Nil Garden City,5,151-250,Luxury,Nile-side hotel with excellent city views
+Hilton Cairo Heliopolis,Heliopolis,El-Orouba Sheraton Al Matar,5,100-180,Upscale,Well-located near airport with outdoor pool
+Holiday Inn & Suites Cairo Maadi,Maadi,A Nile Corniche Maadi,5,90-150,Upscale,Extended stay option in Maadi
+Holiday Inn Cairo Maadi,Maadi,47-B Nile Corniche Maadi,4,70-120,Mid-range,Reliable mid-range option in Maadi
+Holiday Inn Citystars,Nasr City,Citystars Complex Nasr City,5,100-170,Upscale,Connected to Citystars shopping mall
+Intercontinental Cairo Citystars,Nasr City,Omar Ibn El-Khattab Street,5,110-200,Luxury,Connected to Citystars mall with extensive amenities
+Intercontinental Cairo Semiramis,Garden City,Corniche El Nil Street,5,110-180,Luxury,Classic luxury hotel overlooking the Nile
+Jewel Sport City And Aqua Park,Heliopolis,Heliopolis Cairo,5,80-130,Upscale,Sports and aqua park facilities
+JW Marriott Hotel Cairo,Mirage City,Ring Road-Mirage City,5,150-250,Luxury,Resort-style luxury hotel in east Cairo
+Kempinski Nile Hotel Cairo,Garden City,12 Ahmed Ragheb Qasr El Nil,5,180-260,Luxury,European luxury with river views and gourmet dining
+Kempinski Palace Cairo,New Capital,Eastern Ring Road New Capital,5,180-300,Luxury,Palace-style luxury in the new capital
+Le Meridien Cairo Airport,Heliopolis,Cairo Airport Terminal 3,5,89-180,Upscale,Convenient airport hotel connected to terminal
+Le Passage Cairo Hotel & Casino,Heliopolis,Cairo Intl Airport Road,5,77-182,Upscale,Lively hotel and casino near airport
+Ramses Hilton,Downtown,1115 Corniche El Nile,5,83-150,Upscale,Iconic Nile-side hotel near Egyptian Museum
+Rehana Plaza Hotel,New Cairo,New Cairo,5,90-150,Upscale,Modern hotel in New Cairo
+Renaissance Cairo Mirage City Hotel,Mirage City,Ring Road Mirage City,5,100-170,Upscale,Family-friendly hotel with pool facilities
+Sofitel Cairo Downtown Nile,Downtown,Corniche El Nil Street 1191,5,125-200,Upscale,Stylish downtown property on the Nile
+Sofitel Cairo Nile El Gezirah,Zamalek,3 El Thawra Council St Zamalek,5,160-250,Luxury,French-style hotel with balconies and Nile views
+Sonesta Hotel Tower & Casino Cairo,Nasr City,El Tayaran Street,5,80-150,Upscale,Hotel with casino and multiple dining options
+The Guard Hotel,New Cairo,New Cairo,5,100-160,Upscale,Modern luxury hotel in New Cairo
+The Nile Ritz-Carlton Cairo,Downtown,1113 Corniche El Nil Street,5,150-250,Luxury,Iconic luxury property on the Nile corniche
+The St. Regis Cairo,Downtown,1189 Corniche El Nil,5,200-400,Luxury,Ultra-luxury hotel with butler service and Nile views
+The St. Regis New Capital Cairo,New Capital,New Administrative Capital,5,180-350,Luxury,Luxury in the new administrative capital
+The Westin Cairo Golf Resort & Spa,Katameya Dunes,Katameya Dunes,5,150-280,Luxury,Golf resort with spa facilities
+Tolip Family Park Hotel,New Cairo,New Cairo,5,80-130,Upscale,Family-friendly hotel with park
+Triumph Luxury Hotel,Nasr City,Nasr City Cairo,5,120-200,Upscale,Modern luxury in Nasr City
+Waldorf Astoria Cairo Heliopolis,Heliopolis,Orouba Street Heliopolis,5,250-400,Luxury,Ultra-luxury in Heliopolis with golf course access
+Cairo World Trade Center Hotel & Residences,Garden City,Nile Corniche,4,80-130,Upscale,Business hotel in WTC complex
+Steigenberger Hotel El Tahrir Cairo,Downtown,2 Kasr Al Nile,4,60-100,Mid-range,Central hotel near Egyptian Museum and Tahrir Square
+Triumph Plaza Hotel,Heliopolis,El Khlifa El Maamoun Street,4,60-90,Mid-range,Well-located in Heliopolis
+Baron Hotel Cairo,Heliopolis,Heliopolis,4,50-80,Mid-range,Historic hotel near Baron Empain Palace
+Helnan Landmark Hotel,Nasr City,Nasr City,4,60-100,Mid-range,Business hotel in Nasr City
+Hilton Cairo Zamalek Residences,Zamalek,Zamalek,4,80-130,Upscale,Apart-hotel on Zamalek Island
+Golden Tulip Flamenco Hotel Cairo,Zamalek,Zamalek,4,70-110,Mid-range,Spanish-themed hotel on Zamalek
+Novotel Cairo Airport,Heliopolis,Cairo Airport Road,4,42-80,Mid-range,Convenient airport hotel
+Novotel Cairo El Borg,Downtown,El Borg Cairo,4,50-90,Mid-range,Budget-friendly near Cairo centre
+Radisson Blu Hotel Cairo Heliopolis,Heliopolis,Abdel Hamid Badawy St,4,72-130,Mid-range,Popular business hotel in Heliopolis
+Staybridge Suites Cairo Citystars,Nasr City,Citystars Complex,4,70-110,Mid-range,Extended stay near Citystars
+Tolip El Galaa Hotel Cairo,Downtown,1185 Corniche El Nil,4,52-90,Mid-range,Good value Nile-side hotel in downtown
+Jaz Pyramids Resort,Giza,Giza Pyramids Area,4,60-100,Mid-range,Resort near pyramids
+Om Kolthoom Hotel,Zamalek,Zamalek,4,60-100,Mid-range,Hotel with panoramic Nile views
+Pyramisa Suites Hotel Cairo,Dokki,Dokki,4,50-80,Mid-range,Suites near downtown Cairo
+Villa Belle Epoque,Heliopolis,Heliopolis,4,70-120,Mid-range,Boutique hotel in historic villa
+Safir Hotel Cairo,Dokki,Po Box 138 Orman El Missaha Square,5,73-130,Upscale,Full-service spa with family-friendly amenities
+Sheraton Cairo Hotel & Casino,Dokki,Charles de Gaulle Dokki,5,90-160,Upscale,Established hotel in Dokki with city views
+Hilton Cairo Nile Maadi,Maadi,47-B Nile Corniche Maadi,5,110-190,Upscale,Nile view rooms in quiet Maadi district
+Steigenberger Pyramids Cairo,Giza,229 Al Haram Street,5,80-150,Upscale,Near pyramids with modern facilities
+Cairo Inn,Downtown,6 Talaat Harb Square,3,41-70,Mid-range,Cozy rooms at Talaat Harb Square
+Atlas International Hotels,Downtown,26 Mahmoud Bassiouny,3,22-50,Budget,Affordable downtown hotel with basic amenities
+Cleopatra Hotel,Downtown,43 Sherief Street,3,57-85,Mid-range,Well-rated mid-range downtown
+Cosmopolitan Hotel Cairo,Downtown,Downtown Cairo,3,40-70,Mid-range,Classic downtown hotel near Egyptian Museum
+Golden Park Hotel Cairo Heliopolis,Heliopolis,Heliopolis,3,35-60,Budget,Budget hotel in Heliopolis
+Beirut Hotel Cairo,Heliopolis,Heliopolis,3,30-55,Budget,Budget hotel in Heliopolis area
+Egypt Pyramids Inn,Giza,1 Abou Al Hool Al Seiahi,3,24-40,Budget,Budget inn near pyramids
+Best View Pyramids Hotel,Giza,13 Gamal Abd Nasser Street,3,19-35,Budget,Affordable pyramid-view hotel
+Grand City Hotel,Downtown,Bostan Ibn Al Quraish El Tahrir Square,3,17-35,Budget,Budget near Tahrir Square
+Paradise Boutique Hotel,Downtown,18B 26th of July Street,3,20-50,Budget,Boutique budget hotel downtown
+Tahrir Plaza Suites Museum View,Downtown,19 Meret Basha St,3,20-50,Budget,Budget suites near Egyptian Museum
+New Palace Hotel,Downtown,17 Soliman El Halaby St,3,19-35,Budget,Budget downtown near attractions
+New President Hotel Cairo,Zamalek,20 Taha Hussein Street,2,40-70,Mid-range,Well-reviewed mid-range in Zamalek
+Arabia Hotel,Roda Island,Roda Nile Island,2,25-45,Budget,Budget on Roda Island
+Wake Up Cairo Hostel,Downtown,33 A Ramsis St Marouf Tower,2,11-20,Budget,Popular backpacker hostel downtown
+Travelers House Hotel,Downtown,43 Sherief Street 4th Floor,2,11-20,Budget,Budget guesthouse downtown
+Heritage Hostel,Downtown,13 Meret Basha,2,13-25,Budget,Hostel near Egyptian Museum
+Dahab Hostel,Downtown,26 Mahmoud Bassiouny,2,13-25,Budget,Popular backpacker option
+Cecilia Hostel,Downtown,47 El-Falaky Street,2,19-30,Budget,Budget hostel downtown
+Al Masah Hotel And Spa,Nasr City,Nasr City,5,70-120,Upscale,Spa hotel in Nasr City green area
+Amarante Pyramids Hotel,Giza,Giza,4,50-80,Mid-range,Historic building near pyramids
+Amoun Hotel,Mohandiseen,Gameat Al Dewal Street,3,35-60,Budget,Simple furnished rooms in Mohandiseen
+Barcelo Cairo Pyramids,Giza,Giza Pyramids Area,4,60-100,Mid-range,Trendy hotel near pyramids
+Berlin Hotel,Downtown,Downtown Cairo,2,20-35,Budget,Budget downtown with balconies
+Cairo Center Hostel,Downtown,Downtown,2,10-20,Budget,Hostel near Nasser Metro
+Cairo City Center Hostel,Downtown,Downtown,2,12-25,Budget,Hostel with Nile views
+Cairo Khan Hotel,Downtown,Downtown,3,30-55,Budget,Hotel with health club downtown
+Carlton Hotel,Downtown,Downtown,3,35-60,Budget,Classic hotel central location
+City View Hotel,Downtown,Overlooking Egypt Museum,3,25-45,Budget,Near Egyptian Museum and metro
+Conrad Cairo Hotel & Casino,Downtown,Downtown,5,100-200,Upscale,Luxury with Nile views and casino
+El Tonsy Hotel,Downtown,Downtown,3,25-40,Budget,2 minutes from Nile
+Golden Hotel Cairo,Downtown,Downtown,2,20-35,Budget,Budget near Egyptian Museum
+Guardian Guest House,Giza,1 Abou al hool street,3,30-50,Budget,5 min walk to pyramids
+Happy City Hotel,Downtown,Downtown,3,25-45,Budget,Near Egyptian Museum and metro
+Havana Hotel Cairo,Mohandiseen,Mohandiseen,3,35-60,Budget,Mid-range in Mohandiseen
+Helio Cairo Hotel,Heliopolis,Heliopolis,3,30-55,Budget,Near Cairo airport
+Heliopark Hotel,Heliopolis,Heliopolis,3,30-50,Budget,15 min from airport
+Hola Cairo Hostel,Downtown,Downtown,2,10-20,Budget,Hostel near Nasser Metro
+Hor Moheb Hotel,Giza,Giza,3,30-50,Budget,Near pyramids
+Horus House Hotel Zamalek,Zamalek,Zamalek,3,40-65,Mid-range,Near Mit Okba Stadium
+Indiana Hotel,Giza,Giza,3,35-55,Budget,Near Nile promenade
+Invitation Hotel,Downtown,Downtown,2,15-25,Budget,Walking distance to Nile
+Isis Hostel,Downtown,Downtown,2,10-20,Budget,Nile views from rooftop
+Isis Hostel 2,Downtown,Downtown,2,10-20,Budget,Near Egyptian Museum
+King Hotel Cairo,Downtown,Downtown,3,30-50,Budget,Central location
+King Tut Hostel,Downtown,Downtown,2,12-22,Budget,Near Nasser Metro
+Le Meridien Heliopolis,Heliopolis,Heliopolis,5,80-140,Upscale,Residential Heliopolis hotel
+Le Meridien Pyramids Hotel & Spa,Giza,El Remaya Square 25 Pyramids,5,80-160,Upscale,Direct pyramid views with Egyptian-inspired design
+Le Riad Hotel de Charme,Islamic Cairo,Islamic Cairo,4,70-120,Mid-range,Theme rooms in historic Cairo
+Lotus Hotel,Downtown,Sabry Abu Alam Street,2,40-65,Mid-range,Vintage art deco downtown
+Maadi Hotel,Maadi,Maadi,3,50-80,Mid-range,Rooftop pool with Nile views
+Mandarin Hotel,Downtown,Downtown,2,15-25,Budget,Simple accommodation
+May Fair Hotel,Zamalek,Zamalek,3,40-65,Mid-range,In exclusive Zamalek area
+Mayorca Hotel Cairo,Downtown,Downtown,3,35-55,Budget,Near Sadat Metro
+Marriott Mena House Cairo,Giza,6 Pyramids Road Giza,5,300-500,Luxury,Historic palace hotel with direct pyramid views
+Mercure Cairo Le Sphinx,Giza,Giza,4,50-80,Mid-range,Foot of pyramids in palm garden
+Mesho Inn,Downtown,Downtown,2,12-22,Budget,Downtown near Cairo Museum
+Miami Cairo Hostel,Downtown,Downtown,2,12-22,Budget,Free airport shuttle
+Monte Cairo Suites,Mokattam,Mokattam Hills,3,40-70,Mid-range,Apartment complex with pool
+New Garden Palace Hotel,Garden City,Garden City,3,35-60,Budget,Leafy district near Tahrir
+Nile Season Hotel,Downtown,Downtown,3,30-50,Budget,10 min from Egyptian Museum
+Nile Zamalek Hotel,Zamalek,Zamalek,3,45-70,Mid-range,Rooftop bar Nile views
+Oasis Hotel Heliopolis,Heliopolis,Heliopolis,3,35-55,Budget,Central Heliopolis location
+Odeon Palace Hotel,Downtown,Downtown,3,35-55,Budget,550 yards from Nile
+Osiris Hostel Cairo,Downtown,Downtown,2,12-22,Budget,Rooftop terrace near museum
+Pharaoh Egypt Hotel,Dokki,Dokki,3,35-60,Budget,Rooftop pool pyramid views
+Pharaohs Hotel,Dokki,Dokki,3,30-50,Budget,330 ft from Nile banks
+Pharaohs Palace Hostel,Downtown,Downtown,2,12-22,Budget,550 yards from museum
+President Hotel,Zamalek,Zamalek,3,45-70,Mid-range,Nile views in Zamalek
+Pyramids Inn Motel,Giza,Giza Pyramids Area,3,20-40,Budget,Budget inn near pyramids
+Pyramids Park Resort Cairo,Giza,Giza Pyramids Area,4,50-80,Mid-range,25 acres of grounds near pyramids
+Pyramids View Inn,Giza,Giza Plateau,2,20-40,Budget,Rooftop terrace pyramid views
+Radisson Residences Cairo Heliopolis,Heliopolis,Heliopolis,4,60-100,Mid-range,Extended stay in Heliopolis
+Ramses II Hotel,Downtown,Talaat Harb District,2,20-35,Budget,Simple downtown accommodation
+Residence Hotel Suites & Apartments,Maadi,Maadi,3,45-75,Mid-range,Suites with kitchens in Maadi
+River Nile Hotel,Downtown,Corniche El Nile,3,35-55,Budget,Panoramic Nile views
+Rose Hotel Cairo,Downtown,Downtown,2,20-35,Budget,Downtown budget option
+Santana Hotel Cairo,Downtown,Downtown,2,20-35,Budget,Simple downtown hotel
+Select Hotel,Downtown,Downtown,2,15-25,Budget,Budget central option
+Shepheard Hotel Cairo,Downtown,Downtown,4,60-100,Mid-range,Historic name in downtown
+Sphinx Guest House,Giza,Giza,2,15-25,Budget,Near Sphinx
+Swiss Inn Nile Hotel,Dokki,Dokki,4,50-80,Mid-range,Nile-side hotel in Dokki
+Talisman Hotel,Downtown,Downtown,3,40-65,Mid-range,Boutique in downtown
+The President Hotel Cairo,Zamalek,22 Taha Hussein Street,3,45-70,Mid-range,Zamalek budget-friendly
+Tourist Hotel Cairo,Downtown,Downtown,2,30-50,Budget,Guesthouse near downtown
+Town View Hotel,Downtown,162 Al Tahrir Street,2,15-35,Budget,Ultra-budget near Tahrir
+Valencia Hotel,Downtown,Downtown,3,35-60,Budget,Downtown central
+Victoria Cairo Hotel,Downtown,Downtown,3,35-60,Budget,Near downtown attractions
+Voyage Hotel,Downtown,Downtown,2,20-35,Budget,Simple downtown hotel
+Windsor Hotel Cairo,Downtown,Downtown,3,35-60,Budget,Classic downtown hotel
+Golden Inn Hotel,Downtown,Downtown,3,25-45,Budget,Budget central option
+Grand Palace Hotel,Downtown,Downtown,3,35-55,Budget,Downtown budget option
+Grand Nile Tower,Roda Island,Roda Island,5,100-200,Upscale,Former Grand Hyatt on Roda Island
+Grand Pyramids Hotel,Giza,Giza,4,50-80,Mid-range,Near pyramids with pool
+Gresham Hotel,Downtown,Downtown,2,15-25,Budget,Renovated hostel downtown
+Happy days Pyramids Inn,Giza,Giza Pyramids Area,2,15-25,Budget,Budget near pyramids
+Happyton Hotel,Downtown,Downtown,2,20-35,Budget,Simple downtown hotel
+Heliopolis Rock Residence,Heliopolis,Heliopolis,3,35-55,Budget,Heliopolis residence
+Holidays Express Hotel,Mohandiseen,Mohandiseen,3,35-55,Budget,Mohandiseen express hotel
+Horizon Pyramids Hotel,Giza,Giza,3,35-60,Budget,Outdoor pool near pyramids
+Horizon Shahrazad,Downtown,Downtown,3,30-50,Budget,Downtown hotel
+Hostel Luna,Downtown,Downtown,2,10-20,Budget,Hostel half mile from museum
+Hotel Bella Luna,Downtown,Downtown,2,10-20,Budget,Budget downtown option
+Hotel Concorde Dokki,Dokki,Dokki,3,35-55,Budget,Central Dokki location
+Hotel Grand Royal Cairo,Downtown,Downtown,2,15-25,Budget,White decor downtown
+Hotel Richmond Down Town,Downtown,Downtown,2,15-25,Budget,Downtown budget
+Hotel Royal,Downtown,Downtown,2,15-25,Budget,Simple downtown
+Hotel Royal City Center,Downtown,Downtown,2,20-35,Budget,City center location
+Jewel Glorious Hotel,Heliopolis,Heliopolis,4,50-80,Mid-range,Heliopolis jewel brand
+Kanzy Hotel,Downtown,Downtown,2,20-35,Budget,Downtown option
+King Khafren View Inn,Giza,Giza Pyramids Area,2,15-25,Budget,View inn near pyramids
+Kings Palace,Downtown,Downtown,3,30-50,Budget,Downtown palace hotel
+Longchamps Boutique Hotel,Zamalek,Zamalek,3,45-75,Mid-range,Boutique with breakfast
+Luxurious Arabesque 3br Apt,Downtown,Downtown,3,40-70,Mid-range,Arabesque apartment downtown
+Lyly Hotel,Downtown,Downtown,2,20-35,Budget,Simple downtown
+Mamlouk Pyramids Hotel,Giza,Giza,3,30-50,Budget,Budget near pyramids
+Marvel Stone Hotel,Downtown,Downtown,3,30-55,Budget,Downtown budget
+Milano Hotel,Downtown,Downtown,2,20-35,Budget,Downtown budget
+Minerva Grand Boutique,Downtown,Downtown,3,35-60,Budget,Boutique downtown
+Museum Plaza,Downtown,2 Champollion Road,2,20-35,Budget,Near museum
+My Cairo Hotel,Downtown,Downtown,2,15-25,Budget,Simple option
+My Hotel,Downtown,Downtown,2,10-20,Budget,Hostel 2 min from museum
+New Marina Hostel,Downtown,Downtown,2,10-20,Budget,Hostel downtown
+Newcity Hotel & Suites,Nasr City,Nasr City,3,35-55,Budget,Nasr City suites
+Nile Meridien Hotel,Downtown,Downtown,3,35-55,Budget,Nile-side budget
+Nile Supreme,Downtown,Downtown,3,35-55,Budget,Nile area budget
+Nitocrisse Hotel,Giza,Giza,3,30-50,Budget,Giza area hotel
+Nour Elsabah Hotel,Downtown,Downtown,2,20-35,Budget,Downtown budget
+Novotel Cairo 6th of October,6th October,6th October City,4,50-80,Mid-range,October city hotel
+Odeon Palace Hotel,Downtown,Downtown,3,35-55,Budget,Rooftop terrace downtown
+One Season Cairo,Downtown,Downtown,2,12-22,Budget,Near museum
+Panorama Ramsis Hotel & Cafe,Downtown,10 Saif El Dine El Mahrany Ramsis Square,2,20-40,Budget,Near Ramses Station
+Panorama View Pyramids,Giza,Giza,2,15-25,Budget,Panorama pyramid view
+Paradise Home City Stars,Nasr City,City Stars,3,35-55,Budget,Near City Stars mall
+Paris Hotel,Downtown,Downtown,2,15-25,Budget,Heart of downtown
+Pearl Hotel Maadi,Maadi,Maadi,3,45-70,Mid-range,Tree-lined Maadi district
+Pension Roma,Downtown,Downtown,2,15-25,Budget,Budget pension
+Prime Residence New Cairo,New Cairo,New Cairo,3,40-70,Mid-range,New Cairo residence
+Pyramids Charm Hotel,Giza,Giza,3,30-50,Budget,Budget charm near pyramids
+Pyramids Valley,Giza,Giza,2,15-25,Budget,Valley view near pyramids
+Regency Pyramids,Giza,Giza Pyramids Area,3,30-50,Budget,Regency near pyramids
+Royal Maadi Hotel,Maadi,Maadi,3,45-70,Mid-range,Maadi hotel
+Royal Marshal Hotel,Downtown,Downtown,3,30-55,Budget,Downtown with indoor pool
+Safary Hotel,Downtown,Downtown,3,35-55,Budget,Downtown safari themed
+Salma Hotel,Downtown,Downtown,2,20-35,Budget,Simple downtown
+Sara Inn Hostel,Downtown,Downtown,2,10-20,Budget,Hostel downtown
+St George Hotel Cairo,Downtown,Downtown,3,35-55,Budget,Downtown central
+Star Plaza Hotel,Downtown,Downtown,3,35-55,Budget,Star plaza downtown
+Sufi Nights Hostel,Downtown,Downtown,2,12-22,Budget,Hostel downtown
+Sun City Hotel The Gabriel,New Cairo,New Cairo,5,90-150,Upscale,Modern hotel in New Cairo
+Sun Hostel Cairo,Downtown,Downtown,2,10-20,Budget,Hostel downtown
+Tahrir Square Hostel,Downtown,Tahrir Square,2,10-20,Budget,Hostel at Tahrir
+The Australian Hostel,Downtown,23 Abd El Khaleq Sarwat,2,10-20,Budget,Hostel downtown
+The Loft,Downtown,Downtown,2,15-25,Budget,Downtown loft
+The New Garden Palace Hotel,Garden City,Garden City,3,35-60,Budget,Garden City near Tahrir
+The Square Boutique Hotel,Downtown,Talaat Harb Square,3,50-85,Mid-range,Boutique at Talaat Harb
+Tolip El Narges Hotel & Spa,New Cairo,New Cairo,5,80-130,Upscale,Hotel and spa in New Cairo
+Tolip Gardens Hotel,New Cairo,New Cairo,5,70-120,Mid-range,Garden hotel in New Cairo
+Tolip Inn Maadi,Maadi,Maadi,3,40-65,Mid-range,Tolip brand in Maadi
+Toman Pyramids hotel,Giza,Giza Pyramids Area,3,25-45,Budget,Budget pyramid hotel
+Travel Joy Hostel,Downtown,Downtown,2,10-20,Budget,Hostel downtown
+Travelholic Hostel,Downtown,Downtown,2,10-20,Budget,Hostel downtown
+Turquoise Pyramids View,Giza,Giza Pyramids Area,3,25-45,Budget,Turquoise pyramid view
+Tuya Pyramids Inn,Giza,Giza Pyramids Area,2,15-25,Budget,Inn near pyramids
+Up Town Hotel,Heliopolis,Heliopolis,3,29-50,Budget,Heliopolis budget option
+Venice Hosokawaya,Downtown,Downtown,2,15-25,Budget,Downtown budget
+Windsorcolour Holidays,Downtown,Downtown,2,15-25,Budget,Downtown budget
+African House Hostel,Downtown,Downtown,2,10-20,Budget,Hostel near Ramses Station
+Al Nabila Hotel,Heliopolis,Heliopolis,3,35-55,Budget,Heliopolis budget
+Arabella Residence,New Cairo,New Cairo,3,40-70,Mid-range,New Cairo residence
+Arabesque Hotel,Downtown,Downtown,2,15-25,Budget,Downtown budget
+Arabian Nights Hotel,Islamic Cairo,Islamic Cairo,3,20-35,Budget,Near Khan al-Khalili
+Azar Boutique Hotel,Downtown,Downtown,3,35-60,Budget,Boutique downtown
+Cairo Heart Hotel,Downtown,Downtown,3,30-55,Budget,Downtown central
+Cairo Hotel,Heliopolis,Heliopolis,3,30-55,Budget,Heliopolis hotel
+Cairo International Hostel,Downtown,Downtown,2,10-20,Budget,International hostel downtown
+Cairo Moon Hostel,Downtown,Downtown,2,10-20,Budget,Hostel with balcony rooms
+Cairo Panorama Hotel,Downtown,Downtown,3,30-50,Budget,Downtown panorama
+Cairo Paradise Hostel,Downtown,Downtown,2,10-20,Budget,Hostel heart of Cairo
+Cairo Pyramids Hotel,Giza,Giza,3,25-45,Budget,Pyramid area hotel
+Capital Hotel,Downtown,3 Talaat Harb Street,3,40-70,Mid-range,Simple mid-range in central downtown
+Capsis Palace,Downtown,Downtown,2,15-25,Budget,Downtown budget
+Cataract Pyramids Resort,Giza,Giza Pyramids Area,4,50-80,Mid-range,Views of pyramids with pool
+City Hotel,Downtown,Downtown,2,15-25,Budget,Simple downtown hotel
+City Palace Hotel,Downtown,Downtown,3,35-60,Budget,Downtown palace
+Crowne Plaza West Cairo Arkan,6th October,6th October City,5,80-140,Upscale,West Cairo business hotel
+Dahab Hostel Cairo,Downtown,26 Mahmoud Bassiouny,2,13-25,Budget,Popular budget hostel
+Down Town Hotel Cairo,Downtown,Downtown,2,15-25,Budget,Downtown Cairo
+Downtown Inn,Downtown,Downtown,2,12-22,Budget,Downtown inn
+Egyptian Night Hostel,Downtown,Downtown,2,10-20,Budget,Hostel 5 min from museum
+Family Palace Hostel,Downtown,Downtown,2,10-20,Budget,Hostel central Cairo
+Freedom Hostel,Downtown,Downtown,2,10-20,Budget,Hostel near Talat Harb
+Garden View Hostel,Downtown,Downtown,2,12-22,Budget,Near Ramses Station
+Gewan Hotel Cairo,Nasr City,Omar Ibn El Khattab Street Nasr City,5,70-120,Upscale,Nasr City full-service hotel
+Golden Hotel Downtown Tahrir,Downtown,Tahrir Square,2,20-35,Budget,Tahrir budget option
+Golden Palace Hotel,Downtown,Downtown,2,15-25,Budget,Downtown budget
+Grand Agor Hotel,Downtown,Downtown,3,30-55,Budget,Downtown option
+Great Alexander Hostel,Downtown,Downtown,2,10-20,Budget,Hostel downtown
+Happy City Hotel Downtown,Downtown,Downtown,3,25-45,Budget,Near museum and metro
+Hilton Cairo World Trade Centre Residence,Garden City,Nile Corniche,4,80-130,Upscale,Residence at WTC
+Hostel Vienna,Downtown,Downtown,2,10-20,Budget,Hostel 5 min from museum
+Hotel Royal City Center Cairo,Downtown,Downtown,2,15-25,Budget,City center option
+Ismailia House Inn,Downtown,Ismailia,2,15-25,Budget,Downtown inn
+Jamaica Hostel,Downtown,Downtown,2,10-20,Budget,Hostel 10 min from museum
+Le Riad Tell a Story Boutique Hotel,Islamic Cairo,El Darb El Asfar,4,60-100,Mid-range,Theme boutique near Bab Zuweila
+Lady Daiana Nile Cruise Hotel,Maadi,Maadi (Nile Cruise),3,40-70,Mid-range,Cruise hotel on Nile
+Landmark Hotel New Cairo,New Cairo,New Cairo,4,55-90,Mid-range,New Cairo landmark
+Luna & Bella Luna Hostel,Downtown,Downtown,2,10-20,Budget,Hostel near museum
+Maadi Int. Center & Apartment,Maadi,Maadi,3,40-70,Mid-range,Self-catering in Maadi
+Moevenpick Hotel Cairo Pyramids,Giza,Giza Pyramids Area,4,60-100,Mid-range,Garden setting pyramid views
+Mohandeseen Small Apartment,Mohandiseen,Mohandiseen,2,20-35,Budget,Budget small apartment
+New Abdeen Palace Hostel,Downtown,Downtown,2,10-20,Budget,Hostel near Abdeen
+New City Hotel,Downtown,5 Talaat Harb,2,19-30,Budget,Ultra-budget near Tahrir
+New President Hotel Zamalek,Zamalek,Zamalek,3,45-70,Mid-range,Nile-side in Zamalek
+NewCity Suites & Apartments,New Cairo,New Cairo,3,35-60,Budget,New Cairo suites
+Nile Boutique Hotel,Downtown,Downtown,3,35-60,Budget,Nile area boutique
+Panorama Ramsis Hotel & Cafe,Downtown,Ramsis Square,2,20-40,Budget,Near train station
+Ramses Palace Hostel,Downtown,Downtown,2,10-20,Budget,Hostel Ramses area
+Royal Crown Hotel Giza Pyramids View,Giza,Giza Pyramids Area,3,25-45,Budget,Pyramid view budget
+Sama Hotel Sherif Basha,Downtown,Sherif Basha Street,3,25-45,Budget,Downtown budget
+Sphinx Comfort,Giza,Giza,3,25-45,Budget,Near Sphinx
+Spire West Hotel,Giza,Giza District,3,30-55,Budget,Giza district hotel
+Sultan Pyramids Boutique Hotel View,Giza,Giza,3,30-55,Budget,Pyramid boutique
+Triple garden view hotel,Downtown,Downtown,3,30-50,Budget,Near Tahrir Square
+Turquoise Pyramids palace,Giza,Giza,3,25-45,Budget,Giza pyramid palace
+Viaje Hotel Downtown Cairo,Downtown,Mohammed Farid Street,3,60-100,Mid-range,Stylish boutique downtown hotel
+White Swan Hotel Cairo,Downtown,Downtown,3,35-60,Budget,Downtown central
+Garden City Plaza Hotel,Garden City,Garden City,3,24-50,Budget,Budget-friendly in upscale Garden City
+Regency Inn,Downtown,Talaat Harb Street,3,25-55,Budget,Value stay in central downtown
+Royal Inn Residence New Cairo,New Cairo,New Cairo,3,56-90,Mid-range,Serviced apartments in New Cairo
+Sayed Effendi Boutique Hotel,Downtown,Al Fawalah,3,50-90,Mid-range,Boutique hotel in historic downtown
+Gamaleya Boutique Hotel,Islamic Cairo,14 Amir Al Gyosh Al Goani,3,80-130,Mid-range,Boutique hotel in historic Islamic Cairo
+Holy Sheet Plus Boutique Hotel,Downtown,Downtown Cairo,3,50-80,Mid-range,Boutique apartment-style accommodation
+Aura Garden City Hotel,Garden City,Garden City,3,30-55,Budget,Budget-friendly in Garden City
+Calma Haven,New Cairo,New Cairo,4,70-120,Mid-range,Peaceful retreat in New Cairo
+Eileen Hotel Cairo,Downtown,13 Meret Basha Street,3,51-80,Mid-range,Decent mid-range downtown hotel
+Bostan Hotel,Downtown,Bostan Ibn Al Quraish El Tahrir Square,2,15-25,Budget,Budget near Tahrir Square
+Caesars Palace Hotel,Downtown,Downtown,3,30-55,Budget,With nightclub and bar
+Cairo Kingdom Hostel,Downtown,Downtown,2,10-20,Budget,Rooftop terrace hostel
+Dinas Hostel Cairo,Downtown,Downtown,2,10-20,Budget,Simply furnished hostel
+Furnished Apartment Heliopolis Roxy,Heliopolis,Roxy Heliopolis,3,30-55,Budget,Self-catering Heliopolis
+Furnished Apartment Nasr City,Nasr City,Ahmed Kassem Gouda Street,3,30-55,Budget,Furnished Nasr City
+Gawharet Al-Ahram Hotel,Giza,Avenue of the Pyramids,3,25-45,Budget,Near pyramids
+Grand Season Hotel Downtwon,Downtown,Downtown,2,20-35,Budget,Downtown season hotel
+Horus Eye Hostel,Downtown,Downtown,2,10-20,Budget,Hostel 10 min from museum
+Hotel Royal Marshal Cairo,Downtown,Downtown,3,30-55,Budget,With indoor pool
+Jewel Al Nasr Hotel & Apartments,Nasr City,Nasr City,4,50-80,Mid-range,Jewel brand Nasr City
+Jewel Plaza And Aqua Park,Heliopolis,Heliopolis,5,80-130,Upscale,Plaza with aqua park
+Kemet Hotel Tahrir Square,Downtown,Tahrir Square,3,30-50,Budget,Tahrir Square hotel
+Kove Hotel by The Pyramids,Giza,Giza Pyramids,3,35-60,Budget,Near pyramids
+La Mira Pyramids View,Giza,Giza,3,25-45,Budget,Pyramid view hotel
+La Perle du Nil Boutique Hotel,Giza,Giza,3,35-60,Budget,Nile boutique near Giza
+Lava pyramids hotel,Giza,Giza,3,25-45,Budget,Giza budget
+Locanda pyramids view,Giza,Giza,3,25-45,Budget,Locanda near pyramids
+Merak Pyramids Hotel,Giza,Giza,3,30-50,Budget,Pyramid merak hotel
+Museum And Nile View Hotel,Downtown,Downtown,3,35-55,Budget,Museum and Nile views
+Muse Pyramids Lodge,Giza,Giza,3,30-50,Budget,Lodge near pyramids
+Nefertari Pyramids View Inn,Giza,Giza,2,15-25,Budget,Nefertari view inn
+New Museum Guest House,Giza,Giza,2,15-25,Budget,Guest house near museum
+Night Pyramids Inn Hotel,Giza,Giza,2,15-25,Budget,Night inn near pyramids
+North Pyramids Hotel,Giza,Giza,2,15-25,Budget,North area pyramid hotel
+Nut Pyramids View,Giza,Giza,2,15-25,Budget,Pyramid view guest house
+Pyramids Gate Hotel,Giza,Giza,3,25-45,Budget,Gate hotel near pyramids
+Pyramids On The Spot View,Giza,Giza,2,15-25,Budget,On the spot pyramid view
+Pyramids Skyline Hotel Cairo,Giza,Giza,3,25-45,Budget,Skyline pyramid view
+Pyramids Spiritual Gate,Giza,Giza,2,15-25,Budget,Spiritual gate near pyramids
+Pyramids Sunshine Hotel,Giza,Giza,3,25-45,Budget,Sunshine pyramid hotel
+Pyramids Tower Inn,Giza,Giza,2,15-25,Budget,Tower inn near pyramids
+Pyramids Yard Hotel,Giza,Giza,3,25-45,Budget,Yard near pyramids
+Queen Cleopatra Boutique Hotel,Giza,Giza,3,35-60,Budget,Cleopatra boutique
+Sami pyramids Inn,Giza,Giza,2,15-25,Budget,Sami inn near pyramids
+Sol Pyramid Inn,Giza,Giza,2,15-25,Budget,Sol inn near pyramids
+The Palace Pyramids inn,Giza,Giza,2,15-25,Budget,Palace pyramids inn
+Three Giza pyramids inn,Giza,Giza,2,15-25,Budget,Three pyramids inn
+White Crown Pyramids Hotel,Giza,Giza,3,25-45,Budget,Crown pyramid hotel
+White House Pyramids view,Giza,Giza,2,15-25,Budget,White house pyramid view
+Zein Pyramids View Guest House,Giza,Giza,2,15-25,Budget,Zein guest house near pyramids
+Mazar Pyramids Hotel,Giza,Giza,3,25-45,Budget,Mazar near pyramids
+Eyes Of Egypt Pyramids View Boutique Hotel,Giza,Giza,3,30-55,Budget,Eyes of Egypt boutique
+Pyraking Pyramids View Inn,Giza,Giza,2,15-25,Budget,Pyraking view inn
+Sahary Pyramids View Hotel,Giza,Giza,3,25-45,Budget,Sahary pyramid view
+Taj pyramids view inn,Giza,Giza,2,15-25,Budget,Taj view inn
+Turquoise Pyramids & Grand Egyptian museum view,Giza,Giza,3,30-55,Budget,Turquoise museum view
+Jasmine Pyramids Hotel,Giza,Giza,3,25-45,Budget,Jasmine near pyramids
+Great Pyramid Inn,Giza,Giza,3,30-55,Budget,Great pyramid inn
+Royal Great Pyramid INN,Giza,Giza,3,25-45,Budget,Royal great pyramid inn
+Boudl Grand Pyramids,Giza,Giza,3,30-55,Budget,Boudl pyramid brand
+Cairo Crystal Hotel,Heliopolis,Heliopolis,3,35-60,Budget,Crystal brand Heliopolis
+Nilotique,Downtown,Downtown,4,50-80,Mid-range,Nilotique downtown
+YOU Nile View Hotel,Downtown,Downtown,3,35-60,Budget,Nile view hotel downtown
+Grand Talat Harb Plaza Hotel,Downtown,Talaat Harb,3,30-55,Budget,Talat Harb plaza
+Horus Cairo Hotel Downtown,Downtown,Downtown,3,30-50,Budget,Downtown Horus hotel
+Cairo Crown Talaat Harb,Downtown,Talaat Harb,3,30-55,Budget,Crown hotel at Talaat Harb
+Garden City Hotel Nile House,Garden City,Garden City,3,35-55,Budget,Nile house in Garden City
+Elysees Hotel I Tahrir Square,Downtown,Tahrir Square,3,30-55,Budget,Elysees near Tahrir
+Karma Cairo Hotel,Downtown,Downtown,3,35-55,Budget,Karma downtown
+Golden Carven Hotel Cairo,Heliopolis,Heliopolis,3,30-55,Budget,Golden Carven Heliopolis
+Arabella Residence Zamalek,Zamalek,Zamalek,3,45-70,Mid-range,Zamalek residence
+Baron Hotel Heliopolis,Heliopolis,Heliopolis,3,40-65,Mid-range,Near Baron Empain Palace
+Beirut Hotel Downtown,Downtown,Downtown,3,30-55,Budget,Downtown Beirut hotel
+Giza Pyramids View Inn,Giza,Giza Pyramids Area,2,18-30,Budget,Budget inn with pyramid views
+Golden Hotel Downtown,Downtown,Tahrir Square,2,20-35,Budget,Budget near Tahrir
+Hotel Flamenco Cairo,Giza,Giza,4,50-80,Mid-range,Flamenco in Giza
+Tolip El Narges Hotel,New Cairo,New Cairo,5,80-130,Upscale,Narges in New Cairo
+Swiss Inn Nile Hotel,Dokki,Dokki,4,50-80,Mid-range,Swiss inn on Nile
+Villa Belle Epoque Heliopolis,Heliopolis,Heliopolis,4,60-100,Mid-range,Villa boutique
+Pyramids Park Resort,Heliopolis,Heliopolis,5,80-140,Upscale,Park resort Heliopolis
+Baron Hotel Cairo Heliopolis,Heliopolis,Heliopolis,4,50-80,Mid-range,Baron palace area
+Jewel Zamalek Hotel,Zamalek,Zamalek,4,60-100,Mid-range,Jewel in Zamalek
+Jewel Agouza Hotel,Agouza,Agouza,4,50-80,Mid-range,Jewel in Agouza
+Cairo Taj Hotels & Suites Dokki,Dokki,Dokki,4,50-80,Mid-range,Taj in Dokki
+Golden Inn Hotel Cairo,Downtown,Downtown,3,25-45,Budget,Golden inn downtown
+Stay Inn Cairo Hotel,Downtown,Downtown,3,30-55,Budget,Stay inn in Cairo
+Jewel Green Mountain Hotel,New Cairo,New Cairo,4,60-100,Mid-range,Green mountain jewel
+Azal Pyramids Hotel,Giza,Giza,4,50-80,Mid-range,Azal near pyramids
+Jewel Plaza Hotel,Heliopolis,Heliopolis,4,60-100,Mid-range,Jewel plaza Heliopolis
+Triumph Plaza Hotel Heliopolis,Heliopolis,Heliopolis,4,60-90,Mid-range,Triumph in Heliopolis
+Steigenberger Pyramids Cairo,Giza,229 Al Haram Street,5,80-150,Upscale,Pyramid view steigenberger
+Hilton Cairo Grand Nile Residence,Garden City,Garden City,5,100-180,Upscale,Nile residence
+Giza Pyramids View Inn,Giza,Giza Pyramids Area,2,18-30,Budget,View inn near Sphinx
+Citadel Hotel,Downtown,Islamic Cairo,3,30-50,Budget,Near Saladin Citadel
+Horizon Pyramids,Giza,Giza,3,35-55,Budget,Pool pyramid hotel
+Novotel Cairo El Borg,Downtown,Cairo,4,50-90,Mid-range,El Borg near centre
+Jaz Pyramids,Giza,Giza,4,60-100,Mid-range,Jaz brand pyramids
+Holiday Inn Cairo Citystars,Nasr City,Citystars,5,100-170,Upscale,Citystars holiday inn
+Concorde El Salam,Heliopolis,Heliopolis,5,80-140,Upscale,Salam Heliopolis
+Gewan Hotel,Nasr City,Nasr City,5,70-120,Upscale,Gewan Nasr City
+The President Hotel,N/A,Zamalek,3,45-70,Mid-range,President Zamalek
+Maadi Hotel Residence,Maadi,Maadi,3,40-65,Mid-range,Maadi residence
+Moevenpick Media City,Mohandiseen,Media City,4,50-80,Mid-range,Moevenpick media
+Pyramisa Residence,Dokki,Dokki,3,40-65,Mid-range,Pyramisa residence
+Sun City Hotel by Gabriel,New Cairo,New Cairo,5,90-150,Upscale,Gabriel new cairo
+Le Meridien Heliopolis Hotel,Heliopolis,Heliopolis,5,80-140,Upscale,Meridien Heliopolis
+Cairo Palace Hotel,Downtown,Downtown,3,35-60,Budget,Palace downtown
+Grand Season Hotel,Downtown,Downtown,3,30-55,Budget,Grand season downtown
+Indiana Hotel Cairo,Giza,Giza,3,35-55,Budget,Indiana in Giza
+Pharaoh Pyramids Hotel,Giza,Giza,3,30-50,Budget,Pharaoh pyramids
+Belle Epoque Villa,Heliopolis,Heliopolis,4,60-100,Mid-range,Belle epoque villa
+Baron Empain Nearby Hotels,Heliopolis,Heliopolis,3,40-65,Mid-range,Near Baron Empain
+Renaissance Mirage City,New Cairo,Mirage City,5,100-170,Upscale,Renaissance mirage
+Shepheard Cairo,Islamic Cairo,Islamic Cairo,4,60-100,Mid-range,Shepheard historic
+Le Meridien Pyramids Spa,Giza,Giza,5,80-160,Upscale,Pyramid spa hotel
+Sphinx Guest,Giza,Giza,2,15-25,Budget,Sphinx guest
+Lotus Hotel Downtown,Downtown,Downtown,3,40-65,Mid-range,Lotus downtown
+Hor Moheb,Giza,Giza,3,30-50,Budget,Hor Moheb Giza
+Happy City,Downtown,Downtown,3,25-45,Budget,Happy city downtown
+Marriott Cairo,Giza,Zamalek,5,130-220,Luxury,Marriott zamalek
+Eternal Pyramids VIEW INN,Giza,Giza,2,15-25,Budget,Eternal pyramids view
+Nova Pyramids view INN,Giza,Giza,2,15-25,Budget,Nova pyramids view
+Roone pyramids Gust house,Giza,Giza,2,10-20,Budget,Roone guest house
+Life Pyramids Inn,Giza,Giza,2,15-25,Budget,Life pyramids inn
+Bedouin Camp pyramids view INN,Giza,Giza,2,10-20,Budget,Bedouin camp view
+Pyramids Plateau Hotel,Giza,Giza,3,25-45,Budget,Plateau near pyramids
+Kemet Boutique Hotel,Giza,Giza,3,30-55,Budget,Kemet boutique
+Eagles Pyramids View,Giza,Giza,2,15-25,Budget,Eagles view
+Cacillion Pyramids View,Giza,Giza,3,25-45,Budget,Cacillion view
+Esca Pyramids View,Giza,Giza,3,25-45,Budget,Esca view inn
+Middle east pyramids veiw &jacuzzi,Giza,Giza,3,30-55,Budget,Jacuzzi pyramid view
+City plaza pyramids view,Giza,Giza,3,25-45,Budget,City plaza view
+Pyramids Crypt Hotel,Giza,Giza,4,50-80,Mid-range,Crypt near pyramids
+Queen Pyramids View Inn,Giza,Giza,2,15-25,Budget,Queen view inn
+Khan Duidar Inn Pyramids View Rooftop,Giza,Giza,3,25-45,Budget,Khan Duidar view
+Chelay studios,Giza,Giza,2,15-25,Budget,Chelay studios
+Sidi Hamad Pyramids View,Giza,Giza,2,15-25,Budget,Sidi hamad view
+Alba pyramids view,Giza,Giza,2,15-25,Budget,Alba view
+Le Pacha BoutiQue Hotel,Giza,Giza,3,35-60,Budget,Le pacha boutique
+The Gate Hotel Front Pyramids & Sphinx View,Giza,Giza,3,30-55,Budget,Gate hotel view
+SEQUOIA Pyramids View,Giza,Giza,3,30-55,Budget,Sequoia view
+Dream Inn Pyramids View,Giza,Giza,2,15-25,Budget,Dream inn view
+Gold's Pyramids Hotel,Giza,Giza,3,25-45,Budget,Golds pyramid hotel
+DouDou Pyramids View Hotel,Giza,Giza,2,15-25,Budget,Doudou view
+Aphrodite Boutique Hotel,Giza,Giza,3,35-60,Budget,Aphrodite boutique
+Elegance Grand City Hotel,Giza,Giza,3,25-45,Budget,Elegance grand
+Merak Pyramids,Giza,Giza,3,30-50,Budget,Merak pyramids
+West Pyramids Hotel,Giza,Giza,3,25-45,Budget,West pyramids
+Kemet Pyramids View Hotel,Giza,Giza,3,25-45,Budget,Kemet pyramids view
+Gaia Pyramids Hotel,Giza,Giza,3,25-45,Budget,Gaia pyramids
+Sultan Pyramids Boutique,Giza,Giza,3,30-55,Budget,Sultan boutique
+AKHNATON Pyramids View Hotel,Giza,Giza,3,30-55,Budget,Akhnaton view
+Al Farida Boutique Pyramids,Giza,Giza,3,30-55,Budget,Al farida boutique
+Sami pyramids View,Giza,Giza,2,15-25,Budget,Sami pyramids view
+Eyad pyramids view 2,Giza,Giza,2,15-25,Budget,Eyad view
+Tourist Cairo Hotels Downtown,Downtown,Downtown,2,20-35,Budget,Tourist downtown
+Abdeen palace view hostel,Downtown,Downtown,2,10-20,Budget,Abdeen palace hostel
+Lotus Al-Tahrir hotel,Downtown,Tahrir,3,30-55,Budget,Lotus at tahrir
+PANORAMA view pyramids,Giza,Giza,3,25-45,Budget,Panorama pyramids
+Calmaa Kairo,Downtown,Downtown,3,35-60,Budget,Calmaa kairo
+Giza Pyramids Osman Guest House,Giza,Giza,2,15-25,Budget,Osman guest house
+Golden Jazal Pyramids View,Giza,Giza,2,15-25,Budget,Golden jazal view
+Glow Pyramids View Hotel,Giza,Giza,3,25-45,Budget,Glow pyramids view
+Sone Al Boos,Downtown,Downtown,2,15-25,Budget,Sone al boos
+Miramar Evergreen I Tahrir Sqaure,Downtown,Tahrir,3,30-55,Budget,Miramar tahrir
+Downtown Cairo Hotel,Downtown,Downtown,2,20-35,Budget,Downtown cairo
+Town Hotel Cairo,Downtown,Downtown,2,15-25,Budget,Town hotel cairo
+El Farida Hotel,Downtown,Downtown,2,20-35,Budget,El farida downtown
+Cairo Dream Boutique Hotel,Downtown,Downtown,3,35-60,Budget,Cairo dream boutique
+Amin Hotel,Downtown,Downtown,2,15-25,Budget,Amin downtown
+Royal Grand Hotel Cairo,Downtown,Downtown,3,30-55,Budget,Royal grand
+New Lotus I Talaat Harb,Downtown,Talaat Harb,3,30-50,Budget,New lotus talaat harb
+Zuri Pyramids View Hotel,Giza,Giza,3,25-45,Budget,Zuri pyramids
+Loaloat maadi Hostel,Maadi,Cornich Elnile,2,15-25,Budget,Loaloat maadi hostel
+Jewel Maadi Cabins and Club,Maadi,Maadi,3,40-65,Mid-range,Jewel maadi cabins
+Aton Hotel,Giza,Giza,4,50-80,Mid-range,Aton hotel giza
+Cairo Plaza Imperial Hotel,Downtown,Downtown,3,35-60,Budget,Cairo plaza imperial
+White Crown Pyramids,Giza,Giza,3,25-45,Budget,White crown
+Mar Charbel Hotel Cairo,Downtown,Downtown,3,35-55,Budget,Mar charbel
+The Central House Hostel,Downtown,Downtown,2,10-20,Budget,Central house hostel
+GAS Cairo Hotel Downtown,Downtown,Downtown,3,30-55,Budget,GAS hotel downtown
+M-Residence By Brassbell,Zamalek,Zamalek,3,45-75,Mid-range,Brassbell zamalek
+Brassbell L Dt L Hannaux L Tahrir Sq,Downtown,Tahrir,3,35-60,Budget,Brassbell tahrir
+Royal Maxim Palace Kempinski,New Capital,New Capital,5,180-300,Luxury,Royal maxim palace
+Tolip Gardens,New Cairo,New Cairo,5,70-120,Mid-range,Tolip gardens
+Sun City Hotel Gabriel,New Cairo,New Cairo,5,90-150,Upscale,Sun city gabriel
+Le Meridien Heliopolis Hotel,Heliopolis,Heliopolis,5,80-140,Upscale,Meridien heliopolis
+Holiday Inn Cairo Maadi,Maadi,Maadi,4,70-120,Mid-range,Maadi holiday inn
+Odeon Palace,Downtown,Downtown,3,35-55,Budget,Odeon palace downtown
+Grand Nile Tower,Roda Island,Roda Island,5,100-200,Upscale,Grand nile tower roda
+Ismailia House,Downtown,Ismailia,2,15-25,Budget,Ismailia house
+Amoun Hotel Mohandiseen,Mohandiseen,Gameat Al Dewal,3,35-55,Budget,Amoun mohandiseen
+St. Regis New Capital,New Capital,New Administrative Capital,5,180-350,Luxury,St regis new capital
+The Westin Cairo Golf Resort,Katameya,Katameya Dunes,5,150-280,Luxury,Westin golf resort
+Le Passage Cairo Airport,Heliopolis,Airport Road,5,77-182,Upscale,Le passage airport
+Cairo Marriott Zamalek,Zamalek,16 Saray El Gezira,5,130-220,Luxury,Marriott zamalek palace
+Sofitel Gezirah,Zamalek,3 El Thawra Council,5,160-250,Luxury,Sofitel gezirah island
+Four Seasons Nile Plaza,Garden City,1089 Corniche El Nil,5,350-600,Luxury,Four seasons nile plaza
+Four Seasons First Residence,Giza,35 Giza Street,5,350-645,Luxury,Four seasons giza
+Fairmont Nile City,Boulaq,Nile City Towers,5,124-200,Luxury,Fairmont nile city
+Kempinski Nile Garden City,Garden City,12 Ahmed Ragheb,5,180-260,Luxury,Kempinski garden city
+Conrad Cairo,Downtown,Downtown,5,100-200,Upscale,Conrad downtown
+InterContinental Citystars,Nasr City,Citystars,5,110-200,Luxury,Intercon citystars
+InterContinental Semiramis,Garden City,Corniche El Nil,5,110-180,Luxury,Intercon semiramis
+JW Marriott Mirage City,New Cairo,Mirage City,5,150-250,Luxury,JW marriott mirage
+Hilton Heliopolis,Heliopolis,El-Orouba,5,100-180,Upscale,Hilton heliopolis
+Sheraton Cairo,Dokki,Charles de Gaulle,5,90-160,Upscale,Sheraton dokki
+Sonesta Cairo,Nasr City,El Tayaran,5,80-150,Upscale,Sonesta nasr city
+Al Masa Hotel,Nasr City,Nasr City,5,70-120,Upscale,Al masa nasr city
+Triumph Luxury,Nasr City,Nasr City,5,120-200,Upscale,Triumph nasr city
+Dusit Thani New Cairo,New Cairo,El Tesseen Street,5,120-200,Luxury,Dusit thani new cairo
+Rehana Plaza,New Cairo,New Cairo,5,90-150,Upscale,Rehana plaza new cairo
+Renaissance Mirage,New Cairo,Mirage City,5,100-170,Upscale,Renaissance mirage
+The Guard Hotel,New Cairo,New Cairo,5,100-160,Upscale,The guard new cairo
+Safir Hotel,Dokki,El Missaha Square,5,73-130,Upscale,Safir dokki
+Steigenberger El Tahrir,Downtown,2 Kasr Al Nile,4,60-100,Mid-range,Steigenberger tahrir
+Radisson Blu Heliopolis,Heliopolis,Abdel Hamid Badawy,4,72-130,Mid-range,Radisson heliopolis
+Novotel Cairo Airport,Heliopolis,Airport Road,4,42-80,Mid-range,Novotel airport
+Baron Hotel,Heliopolis,Heliopolis,4,50-80,Mid-range,Baron heliopolis
+Hilton Zamalek Residence,Zamalek,Zamalek,4,80-130,Upscale,Hilton zamalek
+Cairo World Trade Center Hotel,Garden City,Nile Corniche,4,80-130,Upscale,WTC hotel
+Golden Park Hotel,Heliopolis,Heliopolis,3,35-60,Budget,Golden park heliopolis
+Atlas International,Downtown,26 Mahmoud Bassiouny,3,22-50,Budget,Atlas downtown
+Cleopatra Hotel,Downtown,43 Sherief Street,3,57-85,Mid-range,Cleopatra downtown
+Cosmopolitan Cairo,Downtown,Downtown,3,40-70,Mid-range,Cosmopolitan downtown
+Lotus Hotel Cairo,Downtown,Sabry Abu Alam,3,40-65,Mid-range,Lotus talaat harb
+Cairo Inn Downtown,Downtown,6 Talaat Harb,3,41-70,Mid-range,Cairo inn talaat harb
+President Hotel Zamalek,Zamalek,22 Taha Hussein,3,45-70,Mid-range,President zamalek
+The Square Boutique,Downtown,Talaat Harb Square,3,50-85,Mid-range,Square boutique
+Paradise Boutique,Downtown,18B 26th of July,3,20-50,Budget,Paradise boutique downtown
+Tahrir Plaza Suites,Downtown,19 Meret Basha,3,20-50,Budget,Tahrir plaza suites
+Grand City Hotel Downtown,Downtown,Bostan Ibn Al Quraish,3,17-35,Budget,Grand city tahrir

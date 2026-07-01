@@ -1,0 +1,25 @@
+model:
+  path: "models_cache/Phi-3-mini-4k-instruct-q4.gguf"
+  backend: "cpu"
+  n_ctx: 4096
+  n_threads: 4
+  n_gpu_layers: 0
+  n_batch: 8
+
+embedder:
+  model: "all-MiniLM-L6-v2"
+
+db:
+  path: "data/places.duckdb"
+
+vector_store:
+  path: "data/chroma_db"
+  collection: "places"
+
+ollama:
+  model: "gemma3:4b"
+  # api_key: set via OLLAMA_API_KEY env var
+
+server:
+  host: "0.0.0.0"
+  port: 8000

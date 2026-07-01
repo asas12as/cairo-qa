@@ -1,0 +1,24 @@
+app = "cairo-qa"
+primary_region = "ams"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = true
+  min_machines_running = 1
+  processes = ["app"]
+
+[[mounts]]
+  source = "cairoqa_data"
+  destination = "/data"
+
+[env]
+  CONFIG_PATH = "/app/config.docker.yaml"
+  DATA_DIR = "/data"
+  DB_PATH = "/data/places.duckdb"
+  VECTOR_STORE_PATH = "/data/chroma_db"
+  CSV_DIR = "/app/data/csv"

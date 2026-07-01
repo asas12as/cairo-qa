@@ -1,0 +1,2154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VoyageAI — AI Travel Concierge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:wght@400;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #ff6b35; --orange-dark: #e55a2b; --orange-glow: rgba(255,107,53,0.15);
+    --bg: #0d0d0d; --surface: #1a1a1a; --surface-elevated: #222;
+    --border: #333; --border-light: #3a3a3a;
+    --text: #eee; --text-light: #999; --text-dim: #666; --text-bright: #fff; --text-inverse: #000;
+    --overlay: rgba(0,0,0,.8); --shadow-sm: 0 1px 4px rgba(0,0,0,.15);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.4); --shadow-lg: 0 16px 64px rgba(0,0,0,.5);
+    --shadow-xl: 0 24px 80px rgba(0,0,0,.5);
+    --radius: 10px; --max-w: 720px;
+    --header-bg: linear-gradient(135deg, #000, #1a0a05);
+    --input-bg: #111; --hover-bg: rgba(255,107,53,0.05);
+    --red: #ef4444;
+  }
+  body.light {
+    --orange: #e65c2a; --orange-dark: #cc4d1f; --orange-glow: rgba(230,92,42,0.12);
+    --bg: #f5f0eb; --surface: #fff; --surface-elevated: #fff;
+    --border: #ddd; --border-light: #e0e0e0;
+    --text: #222; --text-light: #555; --text-dim: #999; --text-bright: #000; --text-inverse: #fff;
+    --overlay: rgba(0,0,0,.5); --shadow-sm: 0 1px 4px rgba(0,0,0,.08);
+    --shadow-md: 0 4px 16px rgba(0,0,0,.12); --shadow-lg: 0 16px 64px rgba(0,0,0,.1);
+    --shadow-xl: 0 24px 80px rgba(0,0,0,.08);
+    --header-bg: linear-gradient(135deg, #fafafa, #f0ece6);
+    --input-bg: #f0ebe5; --hover-bg: rgba(230,92,42,0.04);
+    --red: #dc2626;
+  }
+  body { transition: background .25s, border-color .25s, box-shadow .25s, color .25s; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg); color: var(--text);
+    height: 100vh; display: flex; flex-direction: column;
+  }
+
+  /* ---- Auth gate ---- */
+  #authGate {
+    position: fixed; inset: 0; background: var(--bg); z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+  }
+  #authGate.hidden { display: none; }
+  #authGate .card {
+    background: var(--surface-elevated); border: 1px solid var(--border);
+    border-radius: 16px; padding: 40px 36px 32px;
+    width: 400px; max-width: 92%; box-shadow: var(--shadow-lg);
+  }
+  #authGate .card .brand {
+    font-family: 'Noto Serif', serif; font-size: 26px; text-align: center; margin-bottom: 4px;
+  }
+  #authGate .card .brand span { color: var(--orange); }
+  #authGate .card .tagline {
+    text-align: center; color: var(--text-dim); font-size: 14px; margin-bottom: 28px;
+  }
+  #authGate .tabs {
+    display: flex; border-bottom: 1px solid var(--border); margin-bottom: 24px;
+  }
+  #authGate .tabs button {
+    flex: 1; background: none; border: none; padding: 10px; cursor: pointer;
+    color: var(--text-dim); font-size: 14px; font-weight: 500; font-family: inherit;
+    border-bottom: 2px solid transparent; transition: all .15s;
+  }
+  #authGate .tabs button.active { color: var(--orange); border-color: var(--orange); }
+  #authGate .tabs button:hover { color: var(--text); }
+  #authGate .field {
+    width: 100%; padding: 11px 14px; margin-bottom: 14px;
+    background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); font-size: 14px; font-family: inherit;
+    transition: border-color .2s;
+  }
+  #authGate .field:focus { outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px var(--orange-glow); }
+  #authGate .btn {
+    width: 100%; padding: 12px; border: none; border-radius: 8px;
+    background: linear-gradient(135deg, var(--orange), #ff8c5a);
+    color: #000; font-weight: 600; cursor: pointer; font-size: 15px; font-family: inherit;
+    transition: opacity .2s;
+  }
+  #authGate .btn:hover { opacity: .9; }
+  #authGate .btn:disabled { opacity: .4; cursor: not-allowed; }
+  #authGate .error {
+    color: var(--red); font-size: 13px; margin-bottom: 12px; text-align: center; min-height: 20px;
+  }
+
+  /* ---- Header ---- */
+  header {
+    background: var(--header-bg);
+    padding: 14px 24px; display: flex; align-items: center; gap: 12px;
+    flex-shrink: 0; border-bottom: 1px solid var(--border);
+  }
+  header .logo {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--orange), #ff8c5a);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700; color: #000;
+  }
+  header h1 {
+    font-family: 'Noto Serif', serif; font-size: 20px; font-weight: 600; letter-spacing: -.3px;
+  }
+  header h1 span { color: var(--orange); }
+  header .sub { font-size: 12px; color: var(--text-dim); font-weight: 400; }
+  header .spacer { flex: 1; }
+  header .user-badge {
+    display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--text-light);
+  }
+  header .user-badge .role-badge {
+    padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500;
+  }
+  header .user-badge .role-badge.admin { background: var(--orange); color: #000; }
+  header .user-badge .role-badge.user { background: var(--border); color: var(--text-dim); }
+  header .admin-link {
+    color: var(--text-dim); text-decoration: none; font-size: 12px;
+    border: 1px solid var(--border); padding: 4px 12px; border-radius: 6px;
+    transition: border-color .2s;
+  }
+  header .admin-link:hover { border-color: var(--orange); color: var(--orange); }
+  header .logout-btn {
+    background: none; border: 1px solid var(--border); color: var(--text-dim);
+    padding: 4px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-family: inherit;
+  }
+  header .logout-btn:hover { border-color: var(--red); color: var(--red); }
+  .feedback-icon {
+    background: none; border: none; color: var(--text-dim); cursor: pointer;
+    font-size: 16px; padding: 4px 6px; border-radius: 4px; transition: all .15s;
+  }
+  .feedback-icon:hover { color: var(--orange); background: rgba(255,107,53,.1); }
+
+  /* ---- Browse ---- */
+  #panel-browse { height: calc(100vh - 62px); display: flex; flex-direction: column; }
+  .browse-header { padding: 18px 24px 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+  .browse-header .title-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .browse-header .title-row h2 { font-family: 'Noto Serif', serif; font-size: 18px; }
+  .browse-header .title-row h2 span { color: var(--orange); }
+  .browse-header .title-row .subtitle-badge {
+    font-size: 11px; color: var(--text-dim); background: var(--surface);
+    padding: 2px 10px; border-radius: 12px; border: 1px solid var(--border);
+  }
+  .browse-filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
+  .browse-filters input, .browse-filters select {
+    padding: 8px 12px; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text); font-size: 13px; font-family: inherit;
+  }
+  .browse-filters input:focus, .browse-filters select:focus { outline: none; border-color: var(--orange); }
+  .browse-filters .count { font-size: 13px; color: var(--text-dim); margin-left: auto; }
+  .browse-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px; padding: 18px 24px;
+  }
+  .browse-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 16px; cursor: pointer; transition: all .15s;
+  }
+  .browse-card:hover { border-color: var(--orange); box-shadow: 0 0 20px var(--orange-glow); }
+  .browse-card .name { font-weight: 600; font-size: 15px; color: var(--text-bright); margin-bottom: 4px; }
+  .browse-card .meta { color: var(--text-light); font-size: 12px; margin-bottom: 6px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .browse-card .meta .stars { color: var(--orange); letter-spacing: 1px; }
+  .browse-card .badge {
+    display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500;
+    background: rgba(255,107,53,.1); color: var(--orange);
+  }
+  .browse-card .desc { font-size: 13px; color: var(--text-dim); line-height: 1.5; margin-top: 6px; }
+  .browse-card .review-summary {
+    margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px; font-size: 12px;
+  }
+  .browse-card .review-summary .avg { color: var(--text-light); font-weight: 600; }
+  .browse-card .review-summary .count { color: var(--text-dim); }
+  .browse-results-wrap { flex: 1; overflow-y: auto; }
+  .pagination-browse { display: flex; justify-content: center; gap: 4px; padding: 12px 24px 18px; flex-shrink: 0; }
+  .pagination-browse button {
+    padding: 6px 12px; background: transparent; border: 1px solid var(--border);
+    border-radius: 6px; color: var(--text); cursor: pointer; font-size: 13px; font-family: inherit;
+  }
+  .pagination-browse button:hover { border-color: var(--orange); }
+  .pagination-browse button.active { background: var(--orange); color: #000; border-color: var(--orange); }
+
+  /* ---- Detail modal ---- */
+  .detail-overlay {
+    position: fixed; inset: 0; background: var(--overlay); display: none;
+    align-items: center; justify-content: center; z-index: 150;
+  }
+  .detail-overlay.open { display: flex; }
+  .detail-overlay .card {
+    background: var(--surface-elevated); border: 1px solid var(--border);
+    border-radius: 14px; padding: 28px; width: 620px; max-width: 94%;
+    max-height: 88vh; overflow-y: auto; box-shadow: var(--shadow-xl);
+  }
+  .detail-overlay .card .top {
+    display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;
+  }
+  .detail-overlay .card .top h3 {
+    font-family: 'Noto Serif', serif; font-size: 18px;
+  }
+  .detail-overlay .card .top .close {
+    background: none; border: none; color: var(--text-dim);
+    font-size: 20px; cursor: pointer; padding: 4px;
+  }
+  .detail-overlay .card .top .close:hover { color: var(--text-bright); }
+  .detail-overlay .card .meta {
+    font-size: 13px; color: var(--text-light); margin-top: 4px;
+  }
+  .detail-overlay .card .meta .stars { color: var(--orange); }
+  .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
+  .detail-grid .f { font-size: 13px; }
+  .detail-grid .f .lbl { color: var(--text-dim); font-size: 11px; }
+
+  /* ---- Plan Builder Modal ---- */
+  #planModal {
+    position: fixed; inset: 0; background: var(--overlay); backdrop-filter: blur(8px);
+    display: none; align-items: center; justify-content: center; z-index: 160;
+  }
+  #planModal.open { display: flex; }
+  #planModal .card {
+    background: var(--surface-elevated); border: 1px solid var(--border);
+    border-radius: 16px; padding: 36px 32px 28px;
+    max-width: 520px; width: 90%; max-height: 85vh; overflow-y: auto;
+    box-shadow: var(--shadow-lg); position: relative;
+  }
+  #planModal .card .close-btn {
+    position: absolute; top: 12px; right: 16px;
+    background: none; border: none; color: var(--text-dim); font-size: 22px; cursor: pointer;
+  }
+  #planModal .card .close-btn:hover { color: var(--text-bright); }
+  #planModal .card h2 {
+    font-family: 'Noto Serif', serif; font-size: 22px; color: var(--text-bright); margin-bottom: 4px;
+  }
+  #planModal .card h2 span { color: var(--orange); }
+  #planModal .card > .subtitle { color: var(--text-light); font-size: 14px; margin-bottom: 20px; }
+  #planModal .step { margin-bottom: 18px; }
+  #planModal .step h3 { font-size: 15px; color: var(--text); margin-bottom: 12px; }
+  #planModal .step .opts { display: flex; flex-direction: column; gap: 8px; }
+  #planModal .step .opts button {
+    text-align: left; padding: 10px 14px; border: 1px solid var(--border);
+    border-radius: var(--radius); background: var(--surface); font-size: 14px;
+    cursor: pointer; transition: all .15s; color: var(--text); font-family: inherit;
+  }
+  #planModal .step .opts button:hover { border-color: var(--orange); background: rgba(255,107,53,0.05); }
+  #planModal .step .opts button.selected { border-color: var(--orange); background: rgba(255,107,53,0.1); box-shadow: 0 0 0 2px var(--orange-glow); }
+  #planModal .step .opts button .icon { font-size: 18px; margin-right: 10px; }
+  #planModal .step .opts .custom-option {
+    margin-top: 4px; border-style: dashed; color: var(--text-dim); font-size: 13px; text-align: center;
+  }
+  #planModal .step .opts .custom-option:hover { color: var(--text); }
+  #planModal .step .custom-input { display: none; margin-top: 8px; }
+  #planModal .step .custom-input.open { display: block; }
+  #planModal .step .custom-input input {
+    width: 100%; padding: 10px 14px; background: var(--input-bg); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text); font-size: 14px; font-family: inherit;
+  }
+  #planModal .step .custom-input input:focus { outline: none; border-color: var(--orange); }
+  #planModal .step .custom-input .done-custom {
+    display: inline-block; margin-top: 6px; padding: 6px 16px;
+    background: var(--orange); color: #000; border: none; border-radius: 6px;
+    font-weight: 600; cursor: pointer; font-size: 13px; font-family: inherit;
+  }
+  #planModal .nav-row { display: flex; gap: 10px; margin-top: 20px; }
+  #planModal .nav-row button {
+    flex: 1; padding: 10px; border-radius: var(--radius); font-size: 14px;
+    font-weight: 600; cursor: pointer; font-family: inherit; transition: opacity .2s;
+  }
+  #planModal .nav-row .prev-btn {
+    background: var(--surface); border: 1px solid var(--border); color: var(--text);
+    max-width: 80px;
+  }
+  #planModal .nav-row .prev-btn:hover { border-color: var(--orange); }
+  #planModal .nav-row .next-btn {
+    background: linear-gradient(135deg, var(--orange), #ff8c5a);
+    border: none; color: #000;
+  }
+  #planModal .nav-row .next-btn:hover { opacity: .9; }
+  #planModal .nav-row .next-btn:disabled { opacity: .3; cursor: not-allowed; }
+  #planModal .progress { display: flex; gap: 6px; justify-content: center; margin-bottom: 20px; }
+  #planModal .progress .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--border); transition: background .2s;
+  }
+  #planModal .progress .dot.active { background: var(--orange); box-shadow: 0 0 6px var(--orange-glow); }
+  #planModal .progress .dot.done { background: var(--orange); opacity: .5; }
+
+  /* ---- FAB ---- */
+  #fab-wrap {
+    position: fixed; bottom: 28px; right: 28px; z-index: 90;
+    display: flex; flex-direction: column; align-items: flex-end;
+  }
+  #fab-label {
+    background: var(--surface-elevated); border: 1px solid var(--orange);
+    color: var(--text); padding: 8px 16px; border-radius: 8px;
+    font-size: 13px; font-weight: 500; white-space: nowrap;
+    margin-bottom: 10px; opacity: 0; transform: translateY(6px);
+    transition: all .2s ease; pointer-events: none;
+    box-shadow: var(--shadow-md);
+  }
+  #fab-wrap:hover #fab-label { opacity: 1; transform: translateY(0); }
+  #fab {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--orange), #ff8c5a);
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; color: #000;
+    box-shadow: 0 4px 20px rgba(255,107,53,.4);
+    transition: transform .2s, box-shadow .2s;
+    animation: fab-pulse 2s ease-in-out infinite;
+  }
+  #fab:hover { transform: scale(1.08); box-shadow: 0 6px 28px rgba(255,107,53,.55); animation: none; }
+  #fab:active { transform: scale(.95); }
+  @keyframes fab-pulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(255,107,53,.4); }
+    50% { box-shadow: 0 4px 32px rgba(255,107,53,.65); }
+  }
+
+  /* ===== RESULT OVERLAY (redesigned) ===== */
+  #resultOverlay {
+    position: fixed; inset: 0; background: var(--bg); z-index: 120;
+    display: none; flex-direction: column;
+  }
+  #resultOverlay.open { display: flex; }
+
+  /* Result header — plan info bar */
+  #resultOverlay .res-header {
+    flex-shrink: 0;
+    background: var(--header-bg);
+    border-bottom: 1px solid var(--border);
+    padding: 12px 24px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  #resultOverlay .res-header .res-logo {
+    width: 32px; height: 32px;
+    background: linear-gradient(135deg, var(--orange), #ff8c5a);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700; color: #000; flex-shrink: 0;
+  }
+  #resultOverlay .res-header .res-info { flex: 1; min-width: 0; }
+  #resultOverlay .res-header .res-info .res-title {
+    font-family: 'Noto Serif', serif; font-size: 16px;
+  }
+  #resultOverlay .res-header .res-info .res-title span { color: var(--orange); }
+  #resultOverlay .res-header .res-info .res-meta {
+    font-size: 12px; color: var(--text-dim); display: flex; gap: 6px; align-items: center;
+  }
+  #resultOverlay .res-header .res-info .res-meta .pill {
+    display: inline-block; padding: 1px 8px; border-radius: 10px;
+    background: rgba(255,107,53,.1); color: var(--orange); font-size: 11px; font-weight: 500;
+  }
+  #resultOverlay .res-header .res-info .res-meta .conn-pill {
+    display: inline-block; padding: 1px 8px; border-radius: 10px;
+    background: rgba(34,197,94,.15); color: #22c55e; font-size: 11px; font-weight: 500;
+  }
+  #resultOverlay .res-header .res-actions { display: flex; gap: 6px; }
+  #resultOverlay .res-header .res-actions button {
+    background: none; border: 1px solid var(--border); color: var(--text-dim);
+    padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 12px; font-family: inherit;
+    transition: all .15s;
+  }
+  #resultOverlay .res-header .res-actions .new-plan-btn { border-color: var(--orange); color: var(--orange); }
+  #resultOverlay .res-header .res-actions .new-plan-btn:hover { background: rgba(255,107,53,.1); }
+  #resultOverlay .res-header .res-actions .close-btn:hover { border-color: var(--text-dim); color: var(--text-bright); }
+
+  /* Result body — scrollable message area */
+  #resultOverlay #resultBody {
+    flex: 1; overflow-y: auto; padding: 16px;
+    scroll-behavior: smooth;
+  }
+  #resultBody::-webkit-scrollbar { width: 6px; }
+  #resultBody::-webkit-scrollbar-track { background: transparent; }
+  #resultBody::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  #resultBody::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+  /* Conversation messages */
+  .r-msg {
+    max-width: 760px; margin: 0 auto 14px;
+    display: flex; gap: 10px;
+    animation: msg-in .25s ease-out;
+  }
+  @keyframes msg-in {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .r-msg.user { flex-direction: row-reverse; }
+  .r-msg .r-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+  .r-msg.user .r-avatar {
+    background: linear-gradient(135deg, var(--surface), var(--surface-elevated));
+    border: 1px solid var(--border);
+  }
+  .r-msg.assistant .r-avatar {
+    background: linear-gradient(135deg, var(--orange), #ff8c5a);
+    color: #000; font-weight: 700;
+  }
+  .r-msg .r-bubble {
+    padding: 10px 16px; border-radius: 14px; line-height: 1.6;
+    font-size: 14px; max-width: 80%; word-wrap: break-word;
+    box-shadow: var(--shadow-sm);
+  }
+  .r-msg.user .r-bubble {
+    background: linear-gradient(135deg, var(--surface), var(--surface-elevated));
+    border: 1px solid var(--border-light);
+    border-bottom-right-radius: 4px;
+  }
+  .r-msg.assistant .r-bubble {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-bottom-left-radius: 4px;
+  }
+  .r-msg .r-bubble .cursor {
+    display: inline-block; width: 2px; height: 1em;
+    background: var(--orange); margin-left: 2px;
+    animation: blink .8s step-end infinite; vertical-align: text-bottom;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+
+  /* Typing indicator */
+  .r-typing {
+    max-width: 760px; margin: 0 auto 14px; display: flex; gap: 10px;
+  }
+  .r-typing .r-avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--orange), #ff8c5a);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: #000; font-weight: 700; flex-shrink: 0;
+  }
+  .r-typing .r-dots {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; border-bottom-left-radius: 4px;
+    padding: 12px 18px; display: flex; gap: 5px; align-items: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .r-typing .r-dots span {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--orange); animation: dot-bounce 1.4s infinite;
+  }
+  .r-typing .r-dots span:nth-child(2) { animation-delay: .2s; }
+  .r-typing .r-dots span:nth-child(3) { animation-delay: .4s; }
+  @keyframes dot-bounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: .4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+  }
+
+  /* ---- Plan rendering ---- */
+  .plan-header-bar {
+    background: linear-gradient(135deg, rgba(255,107,53,.08), rgba(255,107,53,.02));
+    border: 1px solid rgba(255,107,53,.2); border-radius: 10px;
+    padding: 14px 18px; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  .plan-header-bar .ph-stat { text-align: center; }
+  .plan-header-bar .ph-stat .ph-num {
+    font-size: 22px; font-weight: 700; color: var(--orange); line-height: 1;
+  }
+  .plan-header-bar .ph-stat .ph-lbl {
+    font-size: 11px; color: var(--text-dim); margin-top: 2px;
+  }
+  .plan-header-bar .ph-stat .ph-num.green { color: #22c55e; }
+  .plan-header-bar .ph-divider {
+    width: 1px; height: 36px; background: var(--border);
+  }
+  .plan-header-bar .ph-tags { display: flex; gap: 6px; flex-wrap: wrap; flex: 1; }
+  .plan-header-bar .ph-tags .ph-tag {
+    padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 500;
+    background: rgba(255,107,53,.1); color: var(--orange); border: 1px solid rgba(255,107,53,.15);
+  }
+  .plan-header-bar .ph-tags .ph-tag.green {
+    background: rgba(34,197,94,.1); color: #22c55e; border-color: rgba(34,197,94,.15);
+  }
+
+  .plan-day-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; margin-bottom: 12px; overflow: hidden;
+    box-shadow: var(--shadow-sm); transition: border-color .15s;
+  }
+  .plan-day-card:hover { border-color: rgba(255,107,53,.3); }
+  .plan-day-card .day-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 16px; background: rgba(255,107,53,.04);
+    border-bottom: 1px solid var(--border);
+  }
+  .plan-day-card .day-header .day-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--orange), #ff8c5a);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #000;
+  }
+  .plan-day-card .day-header .day-title { font-weight: 600; font-size: 14px; flex: 1; }
+  .plan-day-card .day-header .day-spend {
+    font-size: 12px; color: var(--text-dim);
+  }
+  .plan-day-card .day-body { padding: 10px 16px 12px; }
+  .plan-day-card .day-body .day-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 4px 0; font-size: 13.5px; line-height: 1.5;
+  }
+  .plan-day-card .day-body .day-item .di-icon {
+    width: 20px; text-align: center; flex-shrink: 0; font-size: 14px;
+  }
+  .plan-day-card .day-body .day-item .di-text { flex: 1; }
+  .plan-day-card .day-body .day-item .di-text strong { color: var(--text-bright); font-weight: 600; }
+  .plan-day-card .day-body .day-item .di-text .stars-inline { color: var(--orange); font-size: 12px; }
+  .plan-day-card .day-body .day-item .di-text .place-chip {
+    display: inline-block; padding: 1px 8px; border-radius: 4px;
+    background: rgba(255,107,53,.08); color: var(--orange); font-size: 12px; font-weight: 500;
+    margin: 0 2px; cursor: pointer; transition: background .15s;
+  }
+  .plan-day-card .day-body .day-item .di-text .place-chip:hover { background: rgba(255,107,53,.2); }
+
+  .plan-budget-row {
+    display: flex; gap: 8px; margin-top: 12px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+    padding: 12px 16px; font-size: 13px;
+  }
+  .plan-budget-row .br-item { flex: 1; text-align: center; }
+  .plan-budget-row .br-item .br-num {
+    font-weight: 700; color: var(--text-bright); font-size: 16px;
+  }
+  .plan-budget-row .br-item .br-lbl { color: var(--text-dim); font-size: 11px; }
+  .plan-budget-row .br-item .br-num.orange { color: var(--orange); }
+  .plan-budget-row .br-item .br-num.green { color: #22c55e; }
+  .plan-budget-row .br-item .br-num.blue { color: #60a5fa; }
+
+  /* Generic plan text fallback (for non-plan responses) */
+  .plan-text-block {
+    line-height: 1.75; font-size: 14px;
+  }
+  .plan-text-block strong { color: var(--text-bright); font-weight: 600; }
+  .plan-text-block .pt-hr {
+    border: none; border-top: 1px solid var(--border); margin: 12px 0;
+  }
+  .plan-text-block .pt-bullet {
+    display: flex; gap: 6px; padding: 2px 0;
+  }
+  .plan-text-block .pt-bullet .pt-icon { width: 18px; text-align: center; flex-shrink: 0; }
+
+  /* Place chips grid */
+  .place-chips {
+    display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0;
+  }
+  .place-chips .pchip {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 4px 10px; border-radius: 20px; font-size: 12px;
+    background: rgba(255,107,53,.08); border: 1px solid rgba(255,107,53,.15);
+    color: var(--orange); cursor: default; transition: background .15s;
+  }
+  .place-chips .pchip .pc-stars { font-size: 11px; }
+  .place-chips .pchip .pc-price { color: var(--text-dim); font-size: 11px; }
+  .place-chips .pchip:hover { background: rgba(255,107,53,.15); }
+
+  /* Result input area */
+  #resultOverlay .res-input {
+    flex-shrink: 0; padding: 12px 16px 16px;
+    background: var(--bg); border-top: 1px solid var(--border);
+  }
+  #resultOverlay .res-input .inner {
+    max-width: 760px; margin: 0 auto; display: flex; gap: 8px;
+  }
+  #resultOverlay .res-input input {
+    flex: 1; padding: 10px 16px; border: 1px solid var(--border);
+    border-radius: 24px; font-size: 14px; outline: none;
+    background: var(--surface); color: var(--text); font-family: inherit;
+    transition: border-color .2s, box-shadow .2s;
+  }
+  #resultOverlay .res-input input::placeholder { color: var(--text-dim); }
+  #resultOverlay .res-input input:focus {
+    border-color: var(--orange); box-shadow: 0 0 0 3px rgba(255,107,53,.1);
+  }
+  #resultOverlay .res-input input:disabled { opacity: .4; }
+  #resultOverlay .res-input button {
+    width: 40px; height: 40px; border: none; border-radius: 50%;
+    background: linear-gradient(135deg, var(--orange), #ff8c5a);
+    color: #000; font-size: 16px; font-weight: 600; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity .2s, transform .1s; font-family: inherit;
+    flex-shrink: 0;
+  }
+  #resultOverlay .res-input button:hover:not(:disabled) { opacity: .9; }
+  #resultOverlay .res-input button:active:not(:disabled) { transform: scale(.92); }
+  #resultOverlay .res-input button:disabled { opacity: .25; cursor: not-allowed; }
+
+  @media (max-width: 600px) {
+    .plan-header-bar { flex-direction: column; align-items: stretch; text-align: center; }
+    .plan-header-bar .ph-divider { display: none; }
+    .plan-day-card .day-body .day-item { font-size: 13px; }
+    .r-msg .r-bubble { max-width: 92%; }
+  }
+
+  /* ---- Project Feedback Modal ---- */
+  #feedbackModal {
+    position: fixed; inset: 0; background: var(--overlay); backdrop-filter: blur(8px);
+    display: none; align-items: center; justify-content: center; z-index: 170;
+  }
+  #feedbackModal.open { display: flex; }
+  #feedbackModal .card {
+    background: var(--surface-elevated); border: 1px solid var(--border);
+    border-radius: 16px; padding: 32px 28px; width: 400px; max-width: 92%;
+    box-shadow: var(--shadow-lg); text-align: center;
+  }
+  #feedbackModal .card h3 { font-family: 'Noto Serif', serif; font-size: 18px; margin-bottom: 4px; }
+  #feedbackModal .card h3 span { color: var(--orange); }
+  #feedbackModal .card .sub { color: var(--text-dim); font-size: 13px; margin-bottom: 18px; }
+  #feedbackModal .card .big-stars { display: flex; gap: 6px; justify-content: center; margin-bottom: 16px; }
+  #feedbackModal .card .big-stars span {
+    font-size: 36px; cursor: pointer; color: var(--border); transition: color .15s;
+  }
+  #feedbackModal .card .big-stars span.active, #feedbackModal .card .big-stars span:hover { color: var(--orange); }
+  #feedbackModal .card .big-stars span:hover ~ span { color: var(--border); }
+  #feedbackModal .card textarea {
+    width: 100%; padding: 10px 12px; background: var(--input-bg); border: 1px solid var(--border);
+    border-radius: 8px; color: var(--text); font-size: 13px; font-family: inherit;
+    resize: vertical; min-height: 70px; margin-bottom: 14px;
+  }
+  #feedbackModal .card textarea:focus { outline: none; border-color: var(--orange); }
+  #feedbackModal .card .feedback-btn {
+    width: 100%; padding: 11px; border: none; border-radius: 8px;
+    background: linear-gradient(135deg, var(--orange), #ff8c5a);
+    color: #000; font-weight: 600; cursor: pointer; font-size: 15px; font-family: inherit;
+  }
+  #feedbackModal .card .feedback-btn:hover { opacity: .9; }
+  #feedbackModal .card .feedback-btn:disabled { opacity: .4; cursor: not-allowed; }
+  #feedbackModal .card .thanks {
+    display: none; color: var(--orange); font-weight: 500; font-size: 15px; margin-bottom: 4px;
+  }
+  #feedbackModal .card .feedback-close {
+    display: inline-block; margin-top: 12px; font-size: 13px; color: var(--text-dim);
+    cursor: pointer; background: none; border: none; font-family: inherit;
+  }
+  #feedbackModal .card .feedback-close:hover { color: var(--text); }
+
+  /* ---- Profile Modal ---- */
+  #profileModal {
+    position: fixed; inset: 0; background: var(--overlay); backdrop-filter: blur(8px);
+    display: none; align-items: center; justify-content: center; z-index: 180;
+  }
+  #profileModal.open { display: flex; }
+  #profileModal .card {
+    background: var(--surface-elevated); border: 1px solid var(--border);
+    border-radius: 16px; padding: 28px; width: 480px; max-width: 94%;
+    max-height: 88vh; overflow-y: auto; box-shadow: var(--shadow-xl);
+  }
+  #profileModal .card .top {
+    display: flex; justify-content: space-between; align-items: start; margin-bottom: 16px;
+  }
+  #profileModal .card .top h3 { font-family: 'Noto Serif', serif; font-size: 18px; }
+  #profileModal .card .top h3 span { color: var(--orange); }
+  #profileModal .card .top .close {
+    background: none; border: none; color: var(--text-dim); font-size: 20px; cursor: pointer; padding: 4px;
+  }
+  #profileModal .card .top .close:hover { color: var(--text-bright); }
+  .profile-avatar-wrap {
+    text-align: center; margin-bottom: 16px; position: relative;
+  }
+  .profile-avatar-wrap .pa {
+    width: 80px; height: 80px; border-radius: 50%; font-size: 40px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--surface); border: 2px solid var(--border); cursor: pointer;
+    transition: border-color .2s; overflow: hidden;
+  }
+  .profile-avatar-wrap .pa:hover { border-color: var(--orange); }
+  .profile-avatar-wrap .pa img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+  .profile-avatar-wrap .change-hint {
+    font-size: 11px; color: var(--text-dim); margin-top: 4px; cursor: pointer;
+  }
+  .profile-avatar-wrap .change-hint:hover { color: var(--orange); }
+  .emoji-picker {
+    display: none; flex-wrap: wrap; gap: 6px; justify-content: center;
+    margin-top: 8px; max-height: 120px; overflow-y: auto;
+    padding: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+  }
+  .emoji-picker.open { display: flex; }
+  .emoji-picker span {
+    font-size: 28px; cursor: pointer; padding: 4px; border-radius: 6px; transition: background .15s;
+  }
+  .emoji-picker span:hover { background: var(--orange-glow); }
+  #profileModal .field {
+    width: 100%; padding: 10px 12px; margin-bottom: 12px;
+    background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); font-size: 14px; font-family: inherit;
+  }
+  #profileModal .field:focus { outline: none; border-color: var(--orange); }
+  #profileModal textarea.field { resize: vertical; min-height: 60px; }
+  #profileModal .section-title { font-size: 13px; color: var(--text-dim); margin-bottom: 6px; margin-top: 4px; }
+  .pref-summary { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
+  .pref-summary .tag {
+    padding: 4px 10px; border-radius: 6px; font-size: 12px;
+    background: rgba(255,107,53,.1); color: var(--orange); border: 1px solid rgba(255,107,53,.2);
+  }
+  .interest-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+  .interest-tags .itag {
+    padding: 4px 10px; border-radius: 6px; font-size: 12px; cursor: pointer;
+    background: var(--surface); border: 1px solid var(--border); color: var(--text-light);
+    transition: all .15s;
+  }
+  .interest-tags .itag.active { background: rgba(255,107,53,.15); border-color: var(--orange); color: var(--orange); }
+  #profileModal .save-btn {
+    width: 100%; padding: 11px; border: none; border-radius: 8px;
+    background: linear-gradient(135deg, var(--orange), #ff8c5a);
+    color: #000; font-weight: 600; cursor: pointer; font-size: 14px; font-family: inherit;
+  }
+  #profileModal .save-btn:hover { opacity: .9; }
+  #profileModal .save-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+  /* ---- Friends Panel ---- */
+  #friendsPanel {
+    position: fixed; top: 0; right: 0; bottom: 0; width: 380px; max-width: 100%;
+    background: var(--surface-elevated); border-left: 1px solid var(--border);
+    z-index: 175; display: none; flex-direction: column; box-shadow: var(--shadow-xl);
+    animation: slide-in-right .2s ease-out;
+  }
+  #friendsPanel.open { display: flex; }
+  @keyframes slide-in-right { from { transform: translateX(100%); } to { transform: translateX(0); } }
+  #friendsPanel .fp-header {
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+  }
+  #friendsPanel .fp-header h3 { font-family: 'Noto Serif', serif; font-size: 17px; flex: 1; }
+  #friendsPanel .fp-header h3 span { color: var(--orange); }
+  #friendsPanel .fp-header .close {
+    background: none; border: none; color: var(--text-dim); font-size: 18px; cursor: pointer;
+  }
+  #friendsPanel .fp-header .close:hover { color: var(--text-bright); }
+  #friendsPanel .fp-tabs {
+    display: flex; border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+  #friendsPanel .fp-tabs button {
+    flex: 1; padding: 10px; background: none; border: none; cursor: pointer;
+    color: var(--text-dim); font-size: 13px; font-weight: 500; font-family: inherit;
+    border-bottom: 2px solid transparent; transition: all .15s;
+  }
+  #friendsPanel .fp-tabs button.active { color: var(--orange); border-color: var(--orange); }
+  #friendsPanel .fp-tabs button:hover { color: var(--text); }
+  #friendsPanel .fp-tabs button .badge {
+    display: inline-block; background: var(--orange); color: #000; font-size: 10px;
+    padding: 0 6px; border-radius: 8px; margin-left: 4px; font-weight: 600;
+  }
+  #friendsPanel .fp-body { flex: 1; overflow-y: auto; padding: 12px 16px; }
+  .fp-card {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+    border: 1px solid var(--border); border-radius: 10px; margin-bottom: 8px;
+    transition: border-color .15s;
+  }
+  .fp-card:hover { border-color: var(--orange); }
+  .fp-card .fp-avatar { font-size: 28px; width: 36px; text-align: center; flex-shrink: 0; }
+  .fp-card .fp-avatar img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+  .fp-card .fp-info { flex: 1; min-width: 0; }
+  .fp-card .fp-info .fp-name { font-size: 14px; font-weight: 500; color: var(--text-bright); }
+  .fp-card .fp-info .fp-bio { font-size: 12px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .fp-card .fp-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .fp-card .fp-actions button {
+    padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 500;
+    cursor: pointer; font-family: inherit; border: none; transition: opacity .15s;
+  }
+  .fp-card .fp-actions button:hover { opacity: .8; }
+  .fp-card .fp-actions .btn-msg { background: var(--orange); color: #000; }
+  .fp-card .fp-actions .btn-add { background: var(--orange); color: #000; }
+  .fp-card .fp-actions .btn-accept { background: #22c55e; color: #fff; }
+  .fp-card .fp-actions .btn-reject { background: var(--red); color: #fff; }
+  .fp-card .fp-actions .btn-unfriend { background: none; border: 1px solid var(--red); color: var(--red); }
+  #friendsPanel .search-input {
+    width: 100%; padding: 10px 12px; margin-bottom: 10px;
+    background: var(--input-bg); border: 1px solid var(--border); border-radius: 8px;
+    color: var(--text); font-size: 13px; font-family: inherit;
+  }
+  #friendsPanel .search-input:focus { outline: none; border-color: var(--orange); }
+  .fp-empty { text-align: center; padding: 40px 10px; color: var(--text-dim); font-size: 14px; }
+
+  /* ---- Chat Panel ---- */
+  #chatPanel {
+    position: fixed; top: 0; right: 0; bottom: 0; width: 480px; max-width: 100%;
+    background: var(--surface-elevated); border-left: 1px solid var(--border);
+    z-index: 170; display: none; flex-direction: column; box-shadow: var(--shadow-xl);
+    animation: slide-in-right .2s ease-out;
+  }
+  #chatPanel.open { display: flex; }
+  #chatPanel .ch-header {
+    padding: 14px 18px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 10px; flex-shrink: 0;
+  }
+  #chatPanel .ch-header .ch-back {
+    background: none; border: none; color: var(--text-dim); font-size: 18px; cursor: pointer; padding: 0 4px;
+  }
+  #chatPanel .ch-header .ch-back:hover { color: var(--text-bright); }
+  #chatPanel .ch-header h3 { font-family: 'Noto Serif', serif; font-size: 16px; flex: 1; }
+  #chatPanel .ch-header h3 span { color: var(--orange); }
+  #chatPanel .ch-header .ch-close {
+    background: none; border: none; color: var(--text-dim); font-size: 18px; cursor: pointer;
+  }
+  #chatPanel .ch-header .ch-close:hover { color: var(--text-bright); }
+  #chatPanel .ch-conv-list { flex: 1; overflow-y: auto; }
+  .ch-conv-item {
+    display: flex; align-items: center; gap: 10px; padding: 12px 18px;
+    cursor: pointer; border-bottom: 1px solid var(--border); transition: background .15s;
+  }
+  .ch-conv-item:hover { background: var(--hover-bg); }
+  .ch-conv-item .ch-cavatar { font-size: 28px; width: 36px; text-align: center; flex-shrink: 0; }
+  .ch-conv-item .ch-cavatar img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+  .ch-conv-item .ch-info { flex: 1; min-width: 0; }
+  .ch-conv-item .ch-info .ch-cname { font-size: 14px; font-weight: 500; }
+  .ch-conv-item .ch-info .ch-preview { font-size: 12px; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ch-conv-item .ch-info .ch-time { font-size: 11px; color: var(--text-dim); }
+  .ch-conv-item .ch-unread {
+    width: 10px; height: 10px; border-radius: 50%; background: var(--orange); flex-shrink: 0;
+  }
+  .ch-conv-view { display: none; flex-direction: column; flex: 1; min-height: 0; }
+  .ch-conv-view.active { display: flex; }
+  .ch-conv-view .ch-messages {
+    flex: 1; overflow-y: auto; padding: 12px 16px;
+  }
+  .ch-msg {
+    display: flex; gap: 8px; margin-bottom: 12px; animation: msg-in .2s ease-out;
+  }
+  .ch-msg.own { flex-direction: row-reverse; }
+  .ch-msg .ch-bubble {
+    max-width: 78%; padding: 9px 14px; border-radius: 12px; font-size: 14px; line-height: 1.5;
+  }
+  .ch-msg.own .ch-bubble {
+    background: linear-gradient(135deg, var(--orange), #ff8c5a); color: #000;
+    border-bottom-right-radius: 4px;
+  }
+  .ch-msg.other .ch-bubble {
+    background: var(--surface); border: 1px solid var(--border);
+    border-bottom-left-radius: 4px;
+  }
+  .ch-msg .ch-time {
+    font-size: 10px; color: var(--text-dim); text-align: right; margin-top: 4px;
+  }
+  .ch-conv-view .ch-input {
+    padding: 12px 16px; border-top: 1px solid var(--border);
+    display: flex; gap: 8px; flex-shrink: 0;
+  }
+  .ch-conv-view .ch-input input {
+    flex: 1; padding: 10px 14px; border: 1px solid var(--border); border-radius: 10px;
+    background: var(--input-bg); color: var(--text); font-size: 14px; font-family: inherit;
+  }
+  .ch-conv-view .ch-input input:focus { outline: none; border-color: var(--orange); }
+  .ch-conv-view .ch-input button {
+    padding: 10px 18px; border: none; border-radius: 10px;
+    background: linear-gradient(135deg, var(--orange), #ff8c5a);
+    color: #000; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  .ch-conv-view .ch-input button:hover { opacity: .9; }
+  .ch-conv-view .ch-input button:disabled { opacity: .3; cursor: not-allowed; }
+
+  /* ---- Header icon badges ---- */
+  .header-icon-btn {
+    background: none; border: none; color: var(--text-dim); cursor: pointer;
+    font-size: 16px; padding: 6px; border-radius: 6px; transition: all .15s;
+    position: relative;
+  }
+  .header-icon-btn:hover { color: var(--text); background: var(--hover-bg); }
+  .header-icon-btn .h-badge {
+    position: absolute; top: 0; right: 0; min-width: 16px; height: 16px;
+    background: var(--red); color: #fff; font-size: 10px; font-weight: 600;
+    border-radius: 8px; padding: 0 4px; display: flex; align-items: center; justify-content: center;
+  }
+
+  /* ---- Shared ---- */
+  .hidden { display: none !important; }
+  .field {
+    padding: 8px 10px; background: var(--input-bg); border: 1px solid var(--border);
+    border-radius: 6px; color: var(--text); font-size: 13px; font-family: inherit;
+  }
+  .field:focus { outline: none; border-color: var(--orange); }
+
+  /* Empty onboarding styles */
+  #onboarding {
+    position: fixed; inset: 0; background: var(--overlay); backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center; z-index: 100;
+  }
+  #onboarding.hidden { display: none; }
+  #onboarding .card {
+    background: var(--surface-elevated); border: 1px solid var(--border);
+    border-radius: 16px; padding: 36px 32px 28px;
+    max-width: 520px; width: 90%; max-height: 85vh; overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+  }
+  @media (max-width: 600px) {
+    header .sub { display: none; }
+    .browse-grid { grid-template-columns: 1fr; }
+    #fab { width: 52px; height: 52px; font-size: 22px; }
+    #fab-wrap { bottom: 18px; right: 18px; }
+    #planModal .card { padding: 24px 20px; }
+    #feedbackModal .card { padding: 24px 20px; }
+    .r-msg .r-bubble { max-width: 92%; }
+    .r-places { margin-left: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Auth gate -->
+<div id="authGate">
+  <div class="card">
+    <div class="brand">Voyage<span>AI</span></div>
+    <div class="tagline">Your personal Cairo travel concierge</div>
+    <div class="tabs">
+      <button class="active" data-tab="login" onclick="switchAuthTab('login')">Sign In</button>
+      <button data-tab="register" onclick="switchAuthTab('register')">Register</button>
+    </div>
+    <div id="authError" class="error"></div>
+    <div id="authLogin">
+      <input class="field" id="loginUser" type="text" placeholder="Username" autocomplete="username">
+      <input class="field" id="loginPass" type="password" placeholder="Password" autocomplete="current-password">
+      <button class="btn" id="loginBtn" onclick="doLogin()">Sign In</button>
+    </div>
+    <div id="authRegister" class="hidden">
+      <input class="field" id="regUser" type="text" placeholder="Username" autocomplete="off">
+      <input class="field" id="regEmail" type="email" placeholder="Email (optional)" autocomplete="off">
+      <input class="field" id="regPass" type="password" placeholder="Password (min 4 chars)" autocomplete="new-password">
+      <button class="btn" id="regBtn" onclick="doRegister()">Create Account</button>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="logo">V</div>
+  <h1>Voyage<span>AI</span></h1>
+  <span class="sub">682 places · personalized</span>
+  <div class="spacer"></div>
+  <button class="feedback-icon" onclick="toggleTheme()" id="themeBtn" title="Toggle theme" style="font-size:15px">☀</button>
+  <button class="feedback-icon" onclick="openFeedbackModal()" title="Rate VoyageAI">★</button>
+  <button class="header-icon-btn" onclick="openFriendsPanel()" title="Friends" id="friendsIcon" style="display:none">👥<span class="h-badge" id="friendsBadge" style="display:none">0</span></button>
+  <button class="header-icon-btn" onclick="openChatPanel()" title="Messages" id="chatIcon" style="display:none">💬<span class="h-badge" id="chatBadge" style="display:none">0</span></button>
+  <div class="user-badge" id="userBadge" style="display:none;cursor:pointer" onclick="openProfileModal()">
+    <span id="userDisplay"></span>
+    <span class="role-badge" id="roleBadge"></span>
+  </div>
+  <a href="/admin.html" class="admin-link" id="adminLink" style="display:none">⚙ Admin</a>
+  <button class="logout-btn" id="logoutBtn" style="display:none" onclick="doLogout()">Sign Out</button>
+</header>
+
+<!-- Place detail modal -->
+<div class="detail-overlay" id="detailModal">
+  <div class="card">
+    <div class="top">
+      <div>
+        <h3 id="detailName"></h3>
+        <div class="meta" id="detailMeta"></div>
+      </div>
+      <button class="close" onclick="closeDetail()">✕</button>
+    </div>
+    <div class="detail-grid" id="detailFields"></div>
+    <div class="review-section" id="reviewSection">
+      <h4 style="font-size:14px;margin-bottom:12px">📝 Reviews & Ratings</h4>
+      <div id="reviewList" style="max-height:200px;overflow-y:auto;margin-bottom:12px"></div>
+      <div style="border-top:1px solid var(--border);padding-top:12px">
+        <div style="font-size:13px;color:var(--text-light);margin-bottom:6px">Your rating:</div>
+        <div class="star-input" id="starInput">
+          <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
+        </div>
+        <textarea id="reviewComment" class="field" placeholder="Write a review..." style="width:100%;padding:8px 10px;margin:8px 0;background:var(--input-bg);border:1px solid var(--border);border-radius:6px;color:var(--text);font-size:13px;font-family:inherit;resize:vertical;min-height:50px"></textarea>
+        <button class="btn btn-orange" onclick="submitReview()" style="padding:8px 16px;border:none;border-radius:6px;background:var(--orange);color:#000;font-weight:600;cursor:pointer;font-size:13px;font-family:inherit">Submit Review</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Onboarding (taste profile) -->
+<div id="onboarding">
+  <div class="card">
+    <div class="progress" id="progress-dots"></div>
+    <h2>Welcome to <span>VoyageAI</span></h2>
+    <p class="subtitle">A few quick questions to personalize your Cairo experience.</p>
+    <div id="onboard-steps"></div>
+    <button class="done-btn" id="onboard-done" disabled>Start Exploring</button>
+  </div>
+</div>
+
+<!-- Plan builder MCQ -->
+<div id="planModal">
+  <div class="card">
+    <button class="close-btn" onclick="closePlanModal()">✕</button>
+    <div class="progress" id="plan-progress"></div>
+    <h2>🗺️ Build <span>Your Plan</span></h2>
+    <p class="subtitle">Answer a few questions and I'll craft the perfect Cairo itinerary.</p>
+    <div id="plan-steps"></div>
+    <div class="nav-row">
+      <button class="prev-btn" id="planPrev" style="visibility:hidden" onclick="prevPlanStep()">← Back</button>
+      <button class="next-btn" id="planNext" disabled onclick="nextPlanStep()">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Result overlay (redesigned) -->
+<div id="resultOverlay">
+  <div class="res-header">
+    <div class="res-logo">V</div>
+    <div class="res-info">
+      <div class="res-title">Voyage<span>AI</span> <span id="resPlanLabel" style="font-size:12px;color:var(--text-dim);font-family:'Inter',sans-serif"></span></div>
+      <div class="res-meta" id="resMeta"></div>
+    </div>
+    <div class="res-actions">
+      <button class="new-plan-btn" onclick="lastCompanions=[];closeResult();openPlanModal()">+ New Plan</button>
+      <button class="close-btn" onclick="closeResult()">✕ Close</button>
+    </div>
+  </div>
+  <div id="resultBody"></div>
+  <div class="res-input">
+    <div class="inner">
+      <input id="resultQ" type="text" placeholder="Ask a follow-up..." disabled>
+      <button id="resultSend" disabled>→</button>
+    </div>
+  </div>
+</div>
+
+<!-- Project feedback modal -->
+<div id="feedbackModal">
+  <div class="card">
+    <h3>Rate <span>VoyageAI</span></h3>
+    <p class="sub">Help us improve your Cairo travel experience</p>
+    <div class="big-stars" id="feedbackStars">
+      <span data-v="1">★</span><span data-v="2">★</span><span data-v="3">★</span><span data-v="4">★</span><span data-v="5">★</span>
+    </div>
+    <textarea id="feedbackComment" placeholder="Tell us what you think... (optional)"></textarea>
+    <button class="feedback-btn" id="feedbackSubmitBtn" onclick="submitProjectFeedback()" disabled>Submit Feedback</button>
+    <div class="thanks" id="feedbackThanks">Thanks for your feedback! 🙌</div>
+    <div id="myFeedbackList" style="margin-top:10px;max-height:120px;overflow-y:auto;text-align:left"></div>
+    <button class="feedback-close" onclick="closeFeedbackModal()">Close</button>
+  </div>
+</div>
+
+<!-- Profile Modal -->
+<div id="profileModal">
+  <div class="card">
+    <div class="top">
+      <h3><span>My</span> Profile</h3>
+      <button class="close" onclick="closeProfileModal()">✕</button>
+    </div>
+    <div class="profile-avatar-wrap">
+      <div class="pa" id="profAvatar" onclick="toggleEmojiPicker()">
+        <span id="profAvatarEmoji">👤</span>
+      </div>
+      <div class="change-hint" onclick="toggleEmojiPicker()">Change avatar</div>
+      <div class="emoji-picker" id="emojiPicker">
+        <span onclick="pickEmoji('👤')">👤</span><span onclick="pickEmoji('🦋')">🦋</span><span onclick="pickEmoji('🌟')">🌟</span><span onclick="pickEmoji('🎭')">🎭</span>
+        <span onclick="pickEmoji('🧑‍✈️')">🧑‍✈️</span><span onclick="pickEmoji('👩‍🎨')">👩‍🎨</span><span onclick="pickEmoji('🧙')">🧙</span><span onclick="pickEmoji('🦁')">🦁</span>
+        <span onclick="pickEmoji('🐱')">🐱</span><span onclick="pickEmoji('🦊')">🦊</span><span onclick="pickEmoji('🐼')">🐼</span><span onclick="pickEmoji('🐸')">🐸</span>
+        <span onclick="pickEmoji('🌺')">🌺</span><span onclick="pickEmoji('🍕')">🍕</span><span onclick="pickEmoji('🏛️')">🏛️</span><span onclick="pickEmoji('🎸')">🎸</span>
+      </div>
+    </div>
+    <div class="section-title">Display Name</div>
+    <input class="field" id="profDisplayName" placeholder="Your display name">
+    <div class="section-title">Bio</div>
+    <textarea class="field" id="profBio" placeholder="Tell other travelers about yourself..."></textarea>
+    <div class="section-title">Interests</div>
+    <div class="interest-tags" id="profInterests"></div>
+    <div class="section-title">Travel Preferences</div>
+    <div class="pref-summary" id="profPrefs"></div>
+    <button class="save-btn" id="profSaveBtn" onclick="saveProfile()">Save Profile</button>
+  </div>
+</div>
+
+<!-- Profile View Modal (viewing another user) -->
+<div id="profileViewModal">
+  <div class="card" style="width:400px;background:var(--surface-elevated);border:1px solid var(--border);border-radius:16px;padding:28px;box-shadow:var(--shadow-xl);position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:185;display:none;text-align:center">
+    <button onclick="closeProfileView()" style="position:absolute;top:12px;right:16px;background:none;border:none;color:var(--text-dim);font-size:20px;cursor:pointer">✕</button>
+    <div id="pvAvatar" style="font-size:56px;margin-bottom:8px"></div>
+    <div id="pvName" style="font-size:18px;font-weight:600;color:var(--text-bright);margin-bottom:4px"></div>
+    <div id="pvBio" style="font-size:13px;color:var(--text-light);margin-bottom:12px"></div>
+    <div id="pvPrefs" style="margin-bottom:12px"></div>
+    <div style="display:flex;gap:8px;justify-content:center" id="pvActions"></div>
+  </div>
+</div>
+
+<!-- Friends Panel -->
+<div id="friendsPanel">
+  <div class="fp-header">
+    <h3><span>Friends</span></h3>
+    <button class="close" onclick="closeFriendsPanel()">✕</button>
+  </div>
+  <div class="fp-tabs">
+    <button class="active" data-ftab="friends" onclick="switchFTab('friends')">Friends</button>
+    <button data-ftab="requests" onclick="switchFTab('requests')" id="reqTabBtn">Requests <span class="badge" id="reqBadge" style="display:none">0</span></button>
+    <button data-ftab="search" onclick="switchFTab('search')">Find People</button>
+  </div>
+  <div class="fp-body" id="fpBody"></div>
+</div>
+
+<!-- Chat Panel -->
+<div id="chatPanel">
+  <div class="ch-header" id="chHeader">
+    <button class="ch-back" id="chBackBtn" style="display:none" onclick="closeChatConv()">←</button>
+    <h3 id="chTitle"><span>Messages</span></h3>
+    <button class="ch-close" onclick="closeChatPanel()">✕</button>
+  </div>
+  <div class="ch-conv-list" id="chConvList"></div>
+  <div class="ch-conv-view" id="chConvView">
+    <div class="ch-messages" id="chMessages"></div>
+    <div class="ch-input">
+      <input id="chInput" placeholder="Type a message..." disabled>
+      <button id="chSendBtn" disabled onclick="sendChatMsg()">Send</button>
+    </div>
+  </div>
+</div>
+
+<!-- Browse panel (main view) -->
+<div id="panel-browse">
+  <div class="browse-header">
+    <div class="title-row">
+      <h2>🗺️ <span>Explore</span> Cairo</h2>
+      <span class="subtitle-badge">682 places across 46 neighborhoods</span>
+    </div>
+    <div class="browse-filters">
+      <input type="text" id="browseSearch" placeholder="Search name, neighborhood..." oninput="loadBrowse()">
+      <select id="browseCategory" onchange="loadBrowse()">
+        <option value="">All categories</option>
+        <option>Hotel</option><option>Restaurant</option><option>Attraction</option><option>Cafe</option>
+      </select>
+      <select id="browseBudget" onchange="loadBrowse()">
+        <option value="">Any budget</option>
+        <option>Budget</option><option>Mid-range</option><option>Upscale</option><option>Luxury</option>
+      </select>
+      <input type="text" id="browseNeighborhood" placeholder="Neighborhood..." oninput="loadBrowse()">
+      <select id="browseRating" onchange="loadBrowse()">
+        <option value="0">Any rating</option>
+        <option value="4">4+ stars</option>
+        <option value="3">3+ stars</option>
+      </select>
+      <span class="count" id="browseCount"></span>
+    </div>
+  </div>
+  <div class="browse-results-wrap"><div id="browseResults"></div></div>
+  <div class="pagination-browse" id="browsePagination"></div>
+</div>
+
+<!-- Floating action button -->
+<div id="fab-wrap">
+  <div id="fab-label">✧ Make a Plan</div>
+  <button id="fab" onclick="openPlanModal()">✧</button>
+</div>
+
+<script>
+// ---- JWT ----
+function jwtPayload(t) { try { return JSON.parse(atob(t.split('.')[1])); } catch { return null; } }
+function isTokenExpired(t) { const p = jwtPayload(t); return !p || !p.exp || Date.now()/1000 > p.exp; }
+
+let TOKEN = localStorage.getItem('voyage_token');
+let USERNAME = localStorage.getItem('voyage_username') || '';
+let USER_ROLE = localStorage.getItem('voyage_role') || '';
+
+function saveAuth(tok, un, role) { TOKEN=tok; USERNAME=un; USER_ROLE=role; localStorage.setItem('voyage_token',tok); localStorage.setItem('voyage_username',un); localStorage.setItem('voyage_role',role); }
+function clearAuth() { TOKEN='';USERNAME='';USER_ROLE=''; localStorage.removeItem('voyage_token');localStorage.removeItem('voyage_username');localStorage.removeItem('voyage_role'); }
+
+function showApp() {
+  document.getElementById('authGate').classList.add('hidden');
+  document.getElementById('userDisplay').textContent = USERNAME;
+  const badge = document.getElementById('roleBadge');
+  badge.textContent = USER_ROLE; badge.className = 'role-badge ' + USER_ROLE;
+  document.getElementById('userBadge').style.display = 'flex';
+  document.getElementById('logoutBtn').style.display = 'block';
+  document.getElementById('friendsIcon').style.display = '';
+  document.getElementById('chatIcon').style.display = '';
+  if (USER_ROLE === 'admin') document.getElementById('adminLink').style.display = 'inline-block';
+  checkPreferences(); loadBrowse(); refreshFriendsBadge(); refreshChatBadge();
+}
+function showAuthGate() {
+  document.getElementById('authGate').classList.remove('hidden');
+  document.getElementById('userBadge').style.display = 'none';
+  document.getElementById('logoutBtn').style.display = 'none';
+  document.getElementById('adminLink').style.display = 'none';
+  document.getElementById('friendsIcon').style.display = 'none';
+  document.getElementById('chatIcon').style.display = 'none';
+  // Reset ALL form state
+  document.getElementById('loginBtn').disabled=false; document.getElementById('loginBtn').textContent='Sign In';
+  document.getElementById('regBtn').disabled=false; document.getElementById('regBtn').textContent='Create Account';
+  document.getElementById('loginUser').value=''; document.getElementById('loginPass').value='';
+  document.getElementById('regUser').value=''; document.getElementById('regEmail').value=''; document.getElementById('regPass').value='';
+  document.getElementById('authError').textContent='';
+  switchAuthTab('login');
+}
+function switchAuthTab(tab) {
+  document.querySelectorAll('#authGate .tabs button').forEach(b => b.classList.toggle('active',b.dataset.tab===tab));
+  document.getElementById('authLogin').classList.toggle('hidden',tab!=='login');
+  document.getElementById('authRegister').classList.toggle('hidden',tab!=='register');
+  document.getElementById('authError').textContent = '';
+}
+
+async function doLogin() {
+  const u = document.getElementById('loginUser').value.trim(), p = document.getElementById('loginPass').value;
+  if (!u||!p) return;
+  const btn = document.getElementById('loginBtn'); btn.disabled=true; btn.textContent='Signing in...';
+  document.getElementById('authError').textContent='';
+  try {
+    const r=await fetch('/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p})});
+    const d=await r.json();
+    if(!r.ok){document.getElementById('authError').textContent=d.detail;btn.disabled=false;btn.textContent='Sign In';return;}
+    saveAuth(d.access_token,d.username,d.role); showApp();
+  } catch(e){document.getElementById('authError').textContent='Connection error';btn.disabled=false;btn.textContent='Sign In';}
+}
+async function doRegister() {
+  const u=document.getElementById('regUser').value.trim(), e=document.getElementById('regEmail').value.trim(), p=document.getElementById('regPass').value;
+  if(!u||!p)return;
+  const btn=document.getElementById('regBtn'); btn.disabled=true; btn.textContent='Creating account...';
+  document.getElementById('authError').textContent='';
+  try {
+    const r=await fetch('/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({username:u,password:p,email:e})});
+    const d=await r.json();
+    if(!r.ok){document.getElementById('authError').textContent=d.detail;btn.disabled=false;btn.textContent='Create Account';return;}
+    saveAuth(d.access_token,d.username,d.role); showApp();
+  } catch(e){document.getElementById('authError').textContent='Connection error';btn.disabled=false;btn.textContent='Create Account';}
+}
+function doLogout() {
+  // Kill any active stream first
+  if(resAC){try{resAC.abort();}catch{}resAC=null;}
+  if(chatAC){try{chatAC.abort();}catch{}chatAC=null;}
+  resLoading=false;
+  document.getElementById('resultSend').disabled=false;
+  document.getElementById('resultQ').disabled=false;
+  document.getElementById('resultBody').innerHTML='';
+  document.getElementById('resultOverlay').classList.remove('open');
+  document.getElementById('friendsPanel').classList.remove('open');
+  document.getElementById('chatPanel').classList.remove('open');
+  document.getElementById('profileModal').classList.remove('open');
+  clearAuth();
+  showAuthGate();
+}
+
+// ---- Onboarding ----
+const onboardingEl = document.getElementById('onboarding');
+let questions = [], onboardingAnswers = {};
+async function checkPreferences() {
+  try {
+    const res = await fetch(`/preferences/check?user_id=${encodeURIComponent(USERNAME)}`);
+    const data = await res.json();
+    if (data.has_preferences) { onboardingEl.classList.add('hidden'); return; }
+    questions = data.questions || []; renderOnboarding();
+  } catch { onboardingEl.classList.add('hidden'); }
+}
+function renderOnboarding() {
+  if (!questions.length) { onboardingEl.classList.add('hidden'); return; }
+  document.getElementById('progress-dots').innerHTML = questions.map((_,i)=>`<span class="dot ${i===0?'active':''}"></span>`).join('');
+  questions.forEach((q,i)=>{
+    const div=document.createElement('div'); div.className='step'+(i>0?' hidden':''); div.dataset.idx=i;
+    div.innerHTML=`<h3>${q.icon||''} ${q.question}</h3><div class="opts"></div>`;
+    const opts=div.querySelector('.opts');
+    q.options.forEach(opt=>{
+      const btn=document.createElement('button');
+      btn.innerHTML=`<span class="icon">${opt.icon||''}</span> ${opt.label}`;
+      btn.dataset.value=opt.value; btn.addEventListener('click',()=>{onboardingAnswers[q.id]=opt.value;highlightOb(i);});
+      opts.appendChild(btn);
+    });
+    document.getElementById('onboard-steps').appendChild(div);
+  });
+  document.getElementById('onboard-done').addEventListener('click',savePreferences);
+}
+function highlightOb(idx){
+  const btns=document.querySelectorAll(`#onboard-steps .step[data-idx="${idx}"] .opts button`);
+  btns.forEach(b=>b.classList.toggle('selected',b.dataset.value===onboardingAnswers[questions[idx].id]));
+  const dots=document.querySelectorAll('#progress-dots .dot');
+  dots[idx].classList.remove('active');dots[idx].classList.add('done');
+  const next=idx+1;
+  if(next<questions.length){const ns=document.querySelector(`#onboard-steps .step[data-idx="${next}"]`);if(ns){ns.classList.remove('hidden');dots[next].classList.add('active');ns.scrollIntoView({behavior:'smooth',block:'center'});}}
+  else document.getElementById('onboard-done').disabled=false;
+}
+async function savePreferences() {
+  const btn=document.getElementById('onboard-done'); btn.disabled=true; btn.textContent='Saving...';
+  try {
+    const res=await fetch('/preferences/save',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:USERNAME,answers:onboardingAnswers})});
+    if(!res.ok)throw Error();
+    onboardingEl.classList.add('hidden');
+  } catch{btn.disabled=false;btn.textContent='Start Exploring';onboardingEl.classList.add('hidden');}
+}
+
+// ---- Browse ----
+let browsePage=1;
+async function loadBrowse(){
+  const s=document.getElementById('browseSearch').value, c=document.getElementById('browseCategory').value,
+        b=document.getElementById('browseBudget').value, h=document.getElementById('browseNeighborhood').value,
+        r=document.getElementById('browseRating').value;
+  try{
+    const p=new URLSearchParams({search:s,category:c,budget_level:b,neighborhood:h,min_rating:r,page:browsePage,per_page:24});
+    const d=await(await fetch('/places?'+p.toString())).json();
+    document.getElementById('browseCount').textContent=d.total+' places';
+    let rm={};
+    try{
+      const rp=d.places.map(p=>fetch('/places/'+p.id+'/reviews').then(r=>r.json()).catch(()=>null));
+      (await Promise.all(rp)).forEach((rev,i)=>{if(rev&&d.places[i])rm[d.places[i].id]=rev;});
+    }catch{}
+    let html='<div class="browse-grid">';
+    for(const p of d.places){
+      const stars=p.rating?'★'.repeat(Math.round(p.rating))+'☆'.repeat(5-Math.round(p.rating)):'';
+      const rev=rm[p.id], as=rev&&rev.average_rating?'★'.repeat(Math.round(rev.average_rating)):'';
+      html+=`<div class="browse-card" onclick="openDetail(${p.id})">
+        <div class="name">${esc(p.name)}</div>
+        <div class="meta">${stars?`<span class="stars">${stars} ${p.rating}</span>`:''}${p.neighborhood?`<span class="badge">${esc(p.neighborhood)}</span>`:''}${p.budget_level?`<span class="badge">${esc(p.budget_level)}</span>`:''}${p.category?`<span class="badge">${esc(p.category)}</span>`:''}</div>
+        ${p.notes?`<div class="desc">${esc(p.notes.slice(0,120))}${p.notes.length>120?'...':''}</div>`:''}
+        ${rev?`<div class="review-summary">${as?`<span class="avg">${as} ${rev.average_rating}</span>`:''}<span class="count">${rev.count} review${rev.count!==1?'s':''}</span></div>`:''}
+      </div>`;
+    }
+    html+='</div>';
+    document.getElementById('browseResults').innerHTML=html||'<div class="empty" style="padding:60px 20px;text-align:center;color:var(--text-dim)">No places found</div>';
+    const tp=Math.ceil(d.total/d.per_page);
+    let pg='';
+    if(tp>1){
+      pg+=`<button onclick="browsePage=Math.max(1,browsePage-1);loadBrowse()" ${browsePage<=1?'disabled':''}>‹</button>`;
+      for(let i=1;i<=tp&&i<=8;i++)pg+=`<button class="${i===browsePage?'active':''}" onclick="browsePage=${i};loadBrowse()">${i}</button>`;
+      pg+=`<button onclick="browsePage=Math.min(${tp},browsePage+1);loadBrowse()" ${browsePage>=tp?'disabled':''}>›</button>`;
+    }
+    document.getElementById('browsePagination').innerHTML=pg;
+  }catch{}
+}
+
+// ---- Detail + Reviews ----
+let detailPlaceId=null, selectedRating=0;
+async function openDetail(id){
+  detailPlaceId=id; selectedRating=0;
+  try{
+    const p=await(await fetch('/places/'+id)).json();
+    document.getElementById('detailName').textContent=p.name;
+    const stars=p.rating?'★'.repeat(Math.round(p.rating))+'☆'.repeat(5-Math.round(p.rating)):'';
+    document.getElementById('detailMeta').innerHTML=`${stars?`<span class="stars">${stars} ${p.rating}</span>`:''} · ${esc(p.neighborhood||'')} · ${esc(p.budget_level||'')} · ${esc(p.category||'')}`;
+    document.getElementById('detailFields').innerHTML=
+      `<div class="f"><div class="lbl">Phone</div>${esc(p.phone||'-')}</div>
+       <div class="f"><div class="lbl">Hours</div>${esc(p.work_hours||'-')}</div>
+       <div class="f"><div class="lbl">Genre</div>${esc(p.genre_type||'-')}</div>
+       <div class="f"><div class="lbl">Price Range</div>${p.budget_range_min||0}-${p.budget_range_max||0} EGP</div>
+       <div class="f"><div class="lbl">Address</div>${esc(p.address||'-')}</div>
+       <div class="f"><div class="lbl">Notes</div>${esc(p.notes||'-')}</div>`;
+    document.getElementById('detailModal').classList.add('open');
+    loadReviews(id);
+    document.querySelectorAll('#starInput span').forEach(s=>s.classList.remove('active'));
+    document.getElementById('reviewComment').value='';
+  }catch{}
+}
+function closeDetail(){document.getElementById('detailModal').classList.remove('open');detailPlaceId=null;}
+async function loadReviews(pid){
+  try{
+    const d=await(await fetch('/places/'+pid+'/reviews')).json();
+    const c=document.getElementById('reviewList');
+    if(!d.reviews||!d.reviews.length){c.innerHTML='<div style="color:var(--text-dim);font-size:13px">No reviews yet.</div>';return;}
+    c.innerHTML=d.reviews.slice().reverse().map(rev=>{
+      const s='★'.repeat(Math.round(rev.rating))+'☆'.repeat(5-Math.round(rev.rating));
+      return `<div class="review-item" style="padding:8px 0;border-bottom:1px solid var(--border);font-size:13px"><div style="color:var(--text-dim);font-size:12px"><span style="color:var(--orange)">${s}</span> ${esc(rev.user_id)}</div>${rev.comment?`<div style="color:var(--text-light);margin-top:2px">${esc(rev.comment)}</div>`:''}</div>`;
+    }).join('');
+  }catch{}
+}
+document.addEventListener('click',function(e){
+  const s=e.target.closest('#starInput span');
+  if(!s)return;
+  selectedRating=parseInt(s.dataset.v);
+  document.querySelectorAll('#starInput span').forEach(s=>s.classList.toggle('active',parseInt(s.dataset.v)<=selectedRating));
+});
+async function submitReview(){
+  if(!selectedRating||!detailPlaceId)return;
+  const btn=document.querySelector('.detail-overlay .btn'); btn.disabled=true; btn.textContent='Submitting...';
+  try{
+    const r=await fetch('/places/'+detailPlaceId+'/reviews',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:USERNAME,place_id:detailPlaceId,rating:selectedRating,comment:document.getElementById('reviewComment').value.trim()})});
+    if(!r.ok)throw Error();
+    document.getElementById('reviewComment').value='';
+    document.querySelectorAll('#starInput span').forEach(s=>s.classList.remove('active'));
+    selectedRating=0; loadReviews(detailPlaceId); loadBrowse();
+  }catch{}
+  btn.disabled=false; btn.textContent='Submit Review';
+}
+document.getElementById('detailModal').addEventListener('click',function(e){if(e.target===this)closeDetail();});
+
+// ---- Boot ----
+async function boot(){
+  if(TOKEN&&!isTokenExpired(TOKEN)){
+    try{const r=await fetch('/auth/me',{headers:{'Authorization':'Bearer '+TOKEN}});if(r.ok){const d=await r.json();USER_ROLE=d.role;showApp();return;}}catch{}
+  }
+  clearAuth();showAuthGate();
+}
+boot();
+
+// ---- Plan Builder ----
+const PLAN_Q=[
+  {id:'days',icon:'📅',question:'How many days will you be in Cairo?',options:[{value:'1',label:'1 Day — A quick visit',icon:'☀️'},{value:'2',label:'2 Days — Weekend trip',icon:'🌤️'},{value:'3',label:'3 Days — Short getaway',icon:'🌈'},{value:'5',label:'5 Days — Full experience',icon:'🌟'},{value:'7',label:'7 Days — Deep dive',icon:'🔥'}]},
+  {id:'budget',icon:'💰',question:"What's your daily budget per person?",options:[{value:'budget',label:'Budget (~500 EGP/day)',icon:'🟢'},{value:'mid-range',label:'Mid-range (~1,500 EGP/day)',icon:'🟡'},{value:'upscale',label:'Upscale (~2,500 EGP/day)',icon:'🟠'},{value:'luxury',label:'Luxury (~5,000 EGP/day)',icon:'🔴'}]},
+  {id:'travelers',icon:'👥',question:"Who's joining you?",options:[{value:'solo',label:'Solo traveler',icon:'🧑'},{value:'couple',label:'Couple / Romantic trip',icon:'💑'},{value:'family',label:'Family with kids',icon:'👨‍👩‍👧‍👦'},{value:'friends',label:'With friends',icon:'👥'},{value:'group',label:'Large group',icon:'👥'}]},
+  {id:'interests',icon:'🎯',question:'What are you most interested in?',options:[{value:'history',label:'History & Ancient Egypt',icon:'🏛️'},{value:'food',label:'Food & Culinary',icon:'🍽️'},{value:'shopping',label:'Shopping & Souks',icon:'🛍️'},{value:'culture',label:'Culture & Museums',icon:'🎨'},{value:'nightlife',label:'Nightlife & Entertainment',icon:'🌃'},{value:'mix',label:'A bit of everything',icon:'✨'}]},
+  {id:'vibe',icon:'🎵',question:"What's your travel style?",options:[{value:'relaxed',label:'Relaxed — slow mornings, loose schedule',icon:'😌'},{value:'balanced',label:'Balanced — mix of sightseeing and downtime',icon:'⚖️'},{value:'packed',label:'Packed — maximize every hour',icon:'⚡'}]}
+];
+let planAnswers={}, planStep=0;
+
+function openPlanModal(){planAnswers={};planStep=0;document.getElementById('planModal').classList.add('open');renderPlanStep();}
+function closePlanModal(){document.getElementById('planModal').classList.remove('open');}
+
+let friendListCache=[];
+async function loadFriendCache(){try{const r=await(await fetch('/friends',{headers:{'Authorization':'Bearer '+TOKEN}})).json();friendListCache=r.friends||[];}catch{friendListCache=[];}}
+function renderPlanStep(){
+  const c=document.getElementById('plan-steps'), pe=document.getElementById('plan-progress'), nb=document.getElementById('planNext'), pb=document.getElementById('planPrev');
+  pe.innerHTML=PLAN_Q.map((_,i)=>`<span class="dot ${i===planStep?'active':''}${i<planStep?' done':''}"></span>`).join('');
+  pb.style.visibility=planStep===0?'hidden':'visible';
+  const last=planStep===PLAN_Q.length-1;
+  nb.textContent=last?'✨ Generate My Plan':'Next →';
+  c.innerHTML='';
+  const q=PLAN_Q[planStep];
+  const div=document.createElement('div'); div.className='step';
+  div.innerHTML=`<h3>${q.icon} ${q.question}</h3><div class="opts"></div><div class="custom-input"><input type="text" id="customVal" placeholder="Type your answer..." /><button class="done-custom" onclick="submitCustom()">Done</button></div>`;
+  const opts=div.querySelector('.opts');
+  q.options.forEach(opt=>{
+    const btn=document.createElement('button');
+    btn.innerHTML=`<span class="icon">${opt.icon}</span> ${opt.label}`;
+    btn.dataset.value=opt.value;
+    if(planAnswers[q.id]===opt.value)btn.classList.add('selected');
+    btn.addEventListener('click',()=>{
+      planAnswers[q.id]=opt.value;
+      document.querySelectorAll('#plan-steps .step .opts button:not(.custom-option)').forEach(b=>b.classList.toggle('selected',b.dataset.value===opt.value));
+      nb.disabled=false;
+      // Show friend picker if "friends" selected on travelers step
+      if(q.id==='travelers'&&opt.value==='friends')showFriendPicker();
+      else if(q.id==='travelers')hideFriendPicker();
+    });
+    opts.appendChild(btn);
+  });
+  const cb=document.createElement('button'); cb.className='custom-option'; cb.innerHTML='✏️ Enter custom answer...';
+  cb.addEventListener('click',()=>{opts.style.display='none';div.querySelector('.custom-input').classList.add('open');document.getElementById('customVal').focus();});
+  opts.appendChild(cb);
+  c.appendChild(div);
+  // Show friend picker if already selected
+  if(q.id==='travelers'&&planAnswers[q.id]==='friends')showFriendPicker();
+  nb.disabled=!planAnswers[q.id]||(q.id==='travelers'&&planAnswers[q.id]==='friends'&&(!planAnswers.companions||!planAnswers.companions.length));
+}
+function showFriendPicker(){
+  loadFriendCache();
+  setTimeout(()=>{
+    const opts=document.querySelector('#plan-steps .step .opts');
+    if(!opts)return;
+    let fp=document.getElementById('friendPicker');
+    if(!fp){
+      fp=document.createElement('div'); fp.id='friendPicker';
+      fp.style.cssText='margin-top:12px;border-top:1px solid var(--border);padding-top:12px';
+      opts.parentNode.appendChild(fp);
+    }
+    if(!friendListCache.length){
+      fp.innerHTML='<div style="color:var(--text-dim);font-size:13px;text-align:center;padding:8px">No friends yet. Add friends first!</div>';
+      return;
+    }
+    const selected=planAnswers.companions||[];
+    fp.innerHTML='<div style="font-size:13px;color:var(--text-dim);margin-bottom:8px">Select friends joining you:</div>'+
+      friendListCache.map(f=>{
+        const av=f.avatar_url?`<img src="${f.avatar_url}" style="width:24px;height:24px;border-radius:50%;vertical-align:middle;margin-right:6px">`:f.avatar||'👤';
+        const sel=selected.includes(f.username);
+        return `<div style="display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:6px;cursor:pointer;transition:background .15s;${sel?'background:rgba(255,107,53,.1);':''}" onclick="toggleCompanion('${f.username}')">
+          <span style="font-size:18px">${sel?'✅':'⬜'}</span>
+          <span>${av} ${esc(f.display_name)}</span>
+        </div>`;
+      }).join('');
+    const nb=document.getElementById('planNext');
+    if(!selected.length)nb.disabled=true;else nb.disabled=false;
+  },50);
+}
+function hideFriendPicker(){
+  const fp=document.getElementById('friendPicker');
+  if(fp)fp.remove();
+}
+function toggleCompanion(un){
+  if(!planAnswers.companions)planAnswers.companions=[];
+  const idx=planAnswers.companions.indexOf(un);
+  if(idx>=0)planAnswers.companions.splice(idx,1);
+  else planAnswers.companions.push(un);
+  showFriendPicker();
+  const nb=document.getElementById('planNext');
+  nb.disabled=!(planAnswers.companions&&planAnswers.companions.length);
+}
+function submitCustom(){const v=document.getElementById('customVal').value.trim();if(!v)return;planAnswers[PLAN_Q[planStep].id]=v;document.getElementById('planNext').disabled=false;}
+function nextPlanStep(){if(!planAnswers[PLAN_Q[planStep].id])return;if(planStep===PLAN_Q.length-1){generatePlan();return;}planStep++;renderPlanStep();}
+function prevPlanStep(){if(planStep===0)return;planStep--;renderPlanStep();}
+function generatePlan(){
+  if(!PLAN_Q.every(q=>planAnswers[q.id]))return;
+  const bm={budget:'500','mid-range':'1500',upscale:'2500',luxury:'5000'}, tm={solo:'solo',couple:'a couple',family:'a family',friends:'a group of friends',group:'a large group'},
+        im={history:'interested in history and ancient Egypt',food:'looking for great food and dining experiences',shopping:'wanting to explore markets and go shopping',culture:'interested in culture and museums',nightlife:'looking for nightlife and entertainment',mix:'wanting a bit of everything'},
+        vm={relaxed:'relaxed pace',balanced:'balanced schedule',packed:'packed itinerary'};
+  const companions=planAnswers.companions||[];
+  const companionStr=companions.length?` with ${companions.join(', ')}`:'';
+  const q=`Plan a ${planAnswers['days']}-day trip to Cairo for ${tm[planAnswers['travelers']]||'me'}${companionStr} with a daily budget of ${bm[planAnswers['budget']]||'1500'} EGP per person. I'm ${im[planAnswers['interests']]||'interested in exploring Cairo'} and prefer a ${vm[planAnswers['vibe']]||'balanced'} pace. Please suggest hotels, restaurants, attractions and a day-by-day itinerary.`;
+  closePlanModal(); openResult(q,companions);
+}
+
+// ---- Result Overlay (redesigned) ----
+let resAC=null, resLoading=false, lastCompanions=[];
+function openResult(q,companions){
+  lastCompanions=companions||[];
+  document.getElementById('resultOverlay').classList.add('open');
+  document.getElementById('resultBody').innerHTML='';
+  document.getElementById('resMeta').innerHTML='';
+  document.getElementById('resPlanLabel').textContent='';
+  document.getElementById('resultQ').disabled=false; document.getElementById('resultSend').disabled=false;
+  document.getElementById('resultQ').focus();
+  askResult(q);
+}
+function closeResult(){
+  if(resAC)resAC.abort();resAC=null;resLoading=false;
+  document.getElementById('resultOverlay').classList.remove('open');
+  document.getElementById('resultSend').disabled=false;
+  document.getElementById('resultQ').disabled=false;
+  document.getElementById('resultQ').value='';
+}
+
+function addResMsg(role,text){
+  const body=document.getElementById('resultBody');
+  const div=document.createElement('div'); div.className='r-msg '+role;
+  div.innerHTML=`<div class="r-avatar">${role==='user'?'👤':'V'}</div><div class="r-bubble">${text}</div>`;
+  body.appendChild(div); body.scrollTop=body.scrollHeight; return div.querySelector('.r-bubble');
+}
+function getOrCreateResBubble(){
+  const body=document.getElementById('resultBody');
+  let last=body.lastElementChild;
+  if(last&&last.classList.contains('r-msg')&&last.classList.contains('assistant'))return last.querySelector('.r-bubble');
+  const typing=document.createElement('div'); typing.className='r-typing'; typing.id='r-typing';
+  typing.innerHTML=`<div class="r-avatar">V</div><div class="r-dots"><span></span><span></span><span></span></div>`;
+  body.appendChild(typing); body.scrollTop=body.scrollHeight;
+  const stub=document.createElement('div'); stub.id='r-stub'; return stub;
+}
+function removeTyping(){
+  const t=document.getElementById('r-typing'); if(t)t.remove();
+}
+function appendResToken(bubble,token){
+  removeTyping();
+  if(!bubble.parentNode){
+    const body=document.getElementById('resultBody');
+    const div=document.createElement('div'); div.className='r-msg assistant';
+    div.innerHTML=`<div class="r-avatar">V</div><div class="r-bubble"><span class="cursor"></span></div>`;
+    body.appendChild(div); body.scrollTop=body.scrollHeight;
+    bubble=div.querySelector('.r-bubble');
+  }
+  const cursor=bubble.querySelector('.cursor');
+  const tn=document.createTextNode(token);
+  if(cursor)bubble.insertBefore(tn,cursor); else bubble.appendChild(tn);
+  document.getElementById('resultBody').scrollTop=document.getElementById('resultBody').scrollHeight;
+}
+
+// ---- Plan text renderer ----
+function renderPlanText(text){
+  const lines=text.split('\n');
+  const container=document.createElement('div');
+  let planData=null;
+
+  // Try to extract budget info from first line: 📊 **1,500 EGP · 5 days** (~300 EGP/day)
+  const headerMatch=text.match(/📊\s*\*\*([\d,]+)\s*EGP\s*·\s*(\d+)\s*days?\*\*/);
+  if(headerMatch){
+    const totalBudget=parseInt(headerMatch[1].replace(/,/g,''));
+    const days=parseInt(headerMatch[2]);
+    planData={totalBudget,days,dailyBudget:Math.round(totalBudget/days)};
+  }
+
+  // Extract companion names from URL if present
+  let companionNames=[];
+  if(lastCompanions&&lastCompanions.length){
+    companionNames=lastCompanions;
+  }
+
+  // Build header bar
+  if(planData){
+    const hbar=document.createElement('div'); hbar.className='plan-header-bar';
+    let tagsHtml='';
+    if(companionNames.length){
+      tagsHtml+=`<span class="ph-tag green">+${companionNames.length} friend${companionNames.length>1?'s':''}</span>`;
+    }
+    hbar.innerHTML=`
+      <div class="ph-stat"><div class="ph-num">${planData.days}</div><div class="ph-lbl">Days</div></div>
+      <div class="ph-divider"></div>
+      <div class="ph-stat"><div class="ph-num green">${planData.totalBudget.toLocaleString()}</div><div class="ph-lbl">EGP Total</div></div>
+      <div class="ph-divider"></div>
+      <div class="ph-stat"><div class="ph-num">${planData.dailyBudget.toLocaleString()}</div><div class="ph-lbl">EGP/Day</div></div>
+      <div class="ph-tags">${tagsHtml}</div>`;
+    container.appendChild(hbar);
+  }
+
+  // Update header meta
+  const metaEl=document.getElementById('resMeta');
+  if(planData){
+    let metaParts=[`<span class="pill">${planData.days} days</span>`,`<span class="pill">${planData.dailyBudget.toLocaleString()} EGP/day</span>`];
+    if(companionNames.length)metaParts.push(`<span class="conn-pill">👥 ${companionNames.length} companion${companionNames.length>1?'s':''}</span>`);
+    metaEl.innerHTML=metaParts.join('');
+    document.getElementById('resPlanLabel').textContent='· Plan';
+  }
+
+  // Parse day cards
+  let dayIdx=0;
+  let currentDayDiv=null;
+  let buildingFallback=false;
+  let fallbackDiv=document.createElement('div'); fallbackDiv.className='plan-text-block';
+
+  for(let i=0;i<lines.length;i++){
+    const line=lines[i];
+    const trimmed=line.trim();
+
+    // Skip header line and empty lines at top
+    if(trimmed.startsWith('📊'))continue;
+
+    // Day header: **━━━ Day N: Title ━━━**
+    const dayMatch=trimmed.match(/\*{3,}\s*Day\s*(\d+)\s*:\s*(.+?)\s*\*{3,}/);
+    if(dayMatch){
+      if(currentDayDiv)container.appendChild(currentDayDiv);
+      currentDayDiv=document.createElement('div'); currentDayDiv.className='plan-day-card';
+      const dayNum=dayMatch[1];
+      const dayTitle=dayMatch[2];
+      // Extract daily spend if available in following lines
+      currentDayDiv.dataset.dayNum=dayNum;
+      currentDayDiv.innerHTML=`<div class="day-header"><div class="day-num">${dayNum}</div><div class="day-title">${escHtml(dayTitle)}</div><div class="day-spend"></div></div><div class="day-body"></div>`;
+      buildingFallback=false;
+      continue;
+    }
+
+    if(currentDayDiv){
+      const body=currentDayDiv.querySelector('.day-body');
+      const spendEl=currentDayDiv.querySelector('.day-spend');
+
+      // Daily spend: *Daily spend: ~300 EGP*
+      const spendMatch=trimmed.match(/\*Daily spend:\s*~?([\d,]+)\s*EGP\*/);
+      if(spendMatch){
+        spendEl.textContent=`~${spendMatch[1]} EGP`;
+        continue;
+      }
+
+      if(!trimmed)continue;
+
+      // Bullet item:    • **Place Name** ... or  *Meal:* ...
+      // Const: `   • **Place Name** ★★★☆☆  Neighborhood  price`
+      const bulletMatch=trimmed.match(/^\s*•\s*\*\*(.+?)\*\*\s*(.*)/);
+      if(bulletMatch){
+        const name=bulletMatch[1];
+        const rest=bulletMatch[2];
+        // Extract stars
+        const starsMatch=rest.match(/([★☆]+)/);
+        const stars=starsMatch?starsMatch[1]:'';
+        const restClean=rest.replace(/[★☆]+\s*/,'');
+        body.innerHTML+=`<div class="day-item"><div class="di-icon">🍽️</div><div class="di-text"><strong>${escHtml(name)}</strong> ${stars?`<span class="stars-inline">${stars}</span> `:''}${escHtml(restClean)}</div></div>`;
+        continue;
+      }
+
+      // Const: `   *Meal:*   • **Place** ...`
+      const mealMatch=trimmed.match(/^\s*\*(.+?):\*\s*(.*)/);
+      if(mealMatch){
+        const mealType=mealMatch[1];
+        const mealRest=mealMatch[2];
+        // Check if rest contains a place
+        const placeInMeal=mealRest.match(/•\s*\*\*(.+?)\*\*\s*(.*)/);
+        if(placeInMeal){
+          const pname=placeInMeal[1];
+          const prest=placeInMeal[2].replace(/[★☆]+\s*/,'');
+          body.innerHTML+=`<div class="day-item"><div class="di-icon">🍴</div><div class="di-text"><span style="color:var(--text-dim);font-size:12px">${escHtml(mealType)}:</span> <strong>${escHtml(pname)}</strong> ${escHtml(prest)}</div></div>`;
+        } else {
+          body.innerHTML+=`<div class="day-item"><div class="di-icon">📍</div><div class="di-text">${escHtml(mealRest)}</div></div>`;
+        }
+        continue;
+      }
+
+      // Generic line in day body
+      if(trimmed){
+        // Icon based on content
+        let icon='📌';
+        if(trimmed.includes('Check into')||trimmed.includes('check into')||trimmed.includes('hotel')||trimmed.includes('Hostel'))icon='🏨';
+        else if(trimmed.includes('coffee')||trimmed.includes('Coffee')||trimmed.includes('cafe')||trimmed.includes('Cafe'))icon='☕';
+        else if(trimmed.includes('walk')||trimmed.includes('explor')||trimmed.includes('Explore'))icon='🚶';
+        else if(trimmed.includes('Evening')||trimmed.includes('evening')||trimmed.includes('Night'))icon='🌙';
+        else if(trimmed.includes('Morning')||trimmed.includes('morning')||trimmed.includes('Start early'))icon='🌅';
+        else if(trimmed.includes('Afternoon')||trimmed.includes('afternoon'))icon='☀️';
+        else if(trimmed.includes('airport')||trimmed.includes('Airport')||trimmed.includes('depart'))icon='✈️';
+        else if(trimmed.includes('Last day')||trimmed.includes('last day')||trimmed.includes('Farewell'))icon='👋';
+        else if(trimmed.includes('Brunch')||trimmed.includes('brunch')||trimmed.includes('Breakfast'))icon='🥞';
+        else if(trimmed.includes('shopping')||trimmed.includes('Shopping')||trimmed.includes('souvenir'))icon='🛍️';
+
+        body.innerHTML+=`<div class="day-item"><div class="di-icon">${icon}</div><div class="di-text">${renderInline(trimmed)}</div></div>`;
+      }
+      continue;
+    }
+
+    // Fallback for unmatched lines (hotel, budget summary, etc.)
+    if(trimmed.startsWith('---')){
+      fallbackDiv.innerHTML+=`<div class="pt-hr"></div>`;
+      continue;
+    }
+    if(trimmed.startsWith('✅')){
+      fallbackDiv.innerHTML+=`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;font-size:14px;font-weight:500">${renderInline(trimmed)}</div>`;
+      continue;
+    }
+    if(trimmed.startsWith('🏨')||trimmed.startsWith('**🏨')){
+      buildingFallback=true;
+      fallbackDiv.innerHTML+=`<div style="padding:4px 0">${renderInline(trimmed)}</div>`;
+      continue;
+    }
+    if(trimmed.startsWith('*Alternatives')||trimmed.startsWith('*Alternatives')){
+      fallbackDiv.innerHTML+=`<div style="color:var(--text-dim);font-size:13px;padding:0 0 4px 12px">${renderInline(trimmed)}</div>`;
+      continue;
+    }
+    if(buildingFallback){
+      if(!trimmed&&lines[i+1]&&lines[i+1].trim().startsWith('**━━━')){buildingFallback=false;continue;}
+      if(trimmed)fallbackDiv.innerHTML+=`<div style="padding:2px 0">${renderInline(trimmed)}</div>`;
+      continue;
+    }
+    // Leftover lines (breakdown etc.)
+    if(trimmed&&!trimmed.startsWith('📊')){
+      fallbackDiv.innerHTML+=`<div style="padding:2px 0">${renderInline(trimmed)}</div>`;
+    }
+  }
+
+  if(currentDayDiv)container.appendChild(currentDayDiv);
+  if(fallbackDiv.innerHTML.trim())container.appendChild(fallbackDiv);
+
+  return container.innerHTML;
+}
+
+function renderInline(text){
+  // Bold: **text** → <strong>text</strong>
+  // Italic: *text* → <em>text</em>
+  let s=escHtml(text);
+  s=s.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+  s=s.replace(/\*(.+?)\*/g,'<em>$1</em>');
+  // Star ratings ★★★★☆
+  s=s.replace(/([★☆]{2,10})/g,'<span class="stars-inline">$1</span>');
+  return s;
+}
+function esc(s){
+  const d=document.createElement('div'); d.textContent=s; return d.innerHTML;
+}
+function escHtml(s){return esc(s);}
+
+function askResult(question,companions){
+  if(resLoading)return;
+  lastCompanions=companions||[];
+  resLoading=true;
+  document.getElementById('resultSend').disabled=true; document.getElementById('resultQ').disabled=true;
+  addResMsg('user',escHtml(question));
+  getOrCreateResBubble();
+  resAC=new AbortController();
+  const companionParam=lastCompanions.length?'&companion_ids='+encodeURIComponent(lastCompanions.join(',')):'';
+  fetch(`/ask/stream?question=${encodeURIComponent(question)}&user_id=${encodeURIComponent(USERNAME)}${companionParam}`,{signal:resAC.signal})
+    .then(response=>{
+      if(!response.ok)throw Error('Server error');
+      const reader=response.body.getReader(), decoder=new TextDecoder();
+      let buffer='', done=false, bubble=document.createElement('div'), fullText='';
+      function read(){
+        reader.read().then(({done:d,value:v})=>{
+          if(d){done=true;if(resLoading){removeTyping();resFinished();}return;}
+          buffer+=decoder.decode(v,{stream:true});
+          const lines=buffer.split('\n'); buffer=lines.pop()||'';
+          for(const line of lines){
+            if(!line.startsWith('data: '))continue;
+            try{
+              const data=JSON.parse(line.slice(6));
+              if(data.type==='token'){
+                fullText+=data.text;
+                bubble=appendResToken(bubble,data.text);
+              }
+              if(data.type==='done'){
+                removeTyping();
+                // Replace the raw token stream with rendered plan
+                const body=document.getElementById('resultBody');
+                // Remove the last raw assistant bubble
+                const lastMsg=body.querySelector('.r-msg.assistant:last-child');
+                if(lastMsg)lastMsg.remove();
+                // Render full text as structured plan
+                const planHtml=renderPlanText(fullText);
+                const div=document.createElement('div'); div.className='r-msg assistant';
+                div.innerHTML=`<div class="r-avatar">V</div><div class="r-bubble" style="max-width:92%;width:100%">${planHtml}</div>`;
+                body.appendChild(div);
+                body.scrollTop=body.scrollHeight;
+                resFinished();
+              }
+            }catch{}
+          }
+          if(!done)read();
+        }).catch(err=>{if(err.name!=='AbortError'){removeTyping();addResMsg('assistant','⚠️ Error: connection lost. Please try again.');resFinished();}});
+      }
+      read();
+    })
+    .catch(err=>{if(err.name!=='AbortError'){removeTyping();addResMsg('assistant','⚠️ Error: could not reach the server.');resFinished();}});
+}
+function resFinished(){resLoading=false;document.getElementById('resultSend').disabled=false;document.getElementById('resultQ').disabled=false;document.getElementById('resultQ').focus();resAC=null;}
+
+document.getElementById('resultSend').addEventListener('click',()=>{
+  const q=document.getElementById('resultQ').value.trim();
+  if(!q||resLoading)return;
+  document.getElementById('resultQ').value=''; askResult(q,lastCompanions);
+});
+document.getElementById('resultQ').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('resultSend').click();});
+
+// ---- Project Feedback ----
+let fbRating=0;
+function openFeedbackModal(){fbRating=0;document.querySelectorAll('#feedbackStars span').forEach(s=>s.classList.remove('active'));document.getElementById('feedbackComment').value='';document.getElementById('feedbackSubmitBtn').disabled=true;document.getElementById('feedbackSubmitBtn').style.display='block';document.getElementById('feedbackThanks').style.display='none';document.getElementById('feedbackModal').classList.add('open');loadMyFeedback();}
+function closeFeedbackModal(){document.getElementById('feedbackModal').classList.remove('open');}
+document.getElementById('feedbackStars').addEventListener('click',function(e){const s=e.target.closest('span');if(!s)return;fbRating=parseInt(s.dataset.v);this.querySelectorAll('span').forEach(s=>s.classList.toggle('active',parseInt(s.dataset.v)<=fbRating));document.getElementById('feedbackSubmitBtn').disabled=false;});
+async function submitProjectFeedback(){
+  if(!fbRating)return;
+  const btn=document.getElementById('feedbackSubmitBtn'); btn.disabled=true; btn.textContent='Submitting...';
+  try{
+    const r=await fetch('/feedback/project',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:USERNAME,rating:fbRating,comment:document.getElementById('feedbackComment').value.trim()})});
+    if(!r.ok)throw Error();
+    btn.style.display='none'; document.getElementById('feedbackThanks').style.display='block';
+  }catch{btn.disabled=false;btn.textContent='Submit Feedback';}
+}
+async function loadMyFeedback(){
+  try{
+    const r=await(await fetch('/feedback/project?user_id='+encodeURIComponent(USERNAME))).json();
+    const list=document.getElementById('myFeedbackList'); if(!list)return;
+    if(!r.feedback||!r.feedback.length){list.innerHTML='<div style="color:var(--text-dim);font-size:13px;padding:8px 0">No previous feedback.</div>';return;}
+    list.innerHTML=r.feedback.slice().reverse().map(f=>
+      `<div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px">
+        <span style="color:var(--orange)">${'★'.repeat(f.rating)}${'☆'.repeat(5-f.rating)}</span>
+        <span style="color:var(--text-dim);font-size:12px">${f.created_at?f.created_at.slice(0,10):''}</span>
+        ${f.comment?`<span style="color:var(--text-light);font-size:12px">— ${esc(f.comment.slice(0,60))}</span>`:''}
+      </div>`
+    ).join('');
+  }catch{}
+}
+
+// ---- Profile Modal ----
+function openProfileModal(){
+  document.getElementById('emojiPicker').classList.remove('open');
+  document.getElementById('profileModal').classList.add('open');
+  loadProfile();
+}
+function closeProfileModal(){document.getElementById('profileModal').classList.remove('open');}
+let INTEREST_OPTIONS = ['history','food','shopping','culture','nightlife','adventure','relaxed','art','photography','nature'];
+async function loadProfile(){
+  try{
+    const r=await(await fetch('/profile',{headers:{'Authorization':'Bearer '+TOKEN}})).json();
+    const p=r.profile;
+    document.getElementById('profAvatarEmoji').textContent=p.avatar||'👤';
+    document.getElementById('profDisplayName').value=p.display_name||'';
+    document.getElementById('profBio').value=p.bio||'';
+    // Interests
+    const userInts=(p.interests||[]).map(i=>i.toLowerCase());
+    document.getElementById('profInterests').innerHTML=INTEREST_OPTIONS.map(i=>
+      `<span class="itag ${userInts.includes(i)?'active':''}" onclick="toggleInterest(this,'${i}')">${i}</span>`
+    ).join('');
+    // Preferences
+    const prefs=r.preferences||{};
+    const prefTags=document.getElementById('profPrefs');
+    if(prefs.traveler_type||prefs.budget_level||prefs.vibe){
+      prefTags.innerHTML=[
+        prefs.traveler_type?`<span class="tag">${prefs.traveler_type}</span>`:'',
+        prefs.budget_level?`<span class="tag">${prefs.budget_level}</span>`:'',
+        prefs.vibe?`<span class="tag">${prefs.vibe}</span>`:'',
+      ].join('');
+    }else{
+      prefTags.innerHTML='<span style="color:var(--text-dim);font-size:13px">Complete the onboarding to set preferences.</span>';
+    }
+  }catch{}
+}
+let selectedInterests=[];
+function toggleInterest(el,val){
+  el.classList.toggle('active');
+  selectedInterests=Array.from(document.querySelectorAll('#profInterests .itag.active')).map(el=>el.textContent.trim());
+}
+async function saveProfile(){
+  const btn=document.getElementById('profSaveBtn');btn.disabled=true;btn.textContent='Saving...';
+  try{
+    const body={display_name:document.getElementById('profDisplayName').value.trim(),bio:document.getElementById('profBio').value.trim(),interests:selectedInterests};
+    const r=await fetch('/profile',{method:'PUT',headers:{'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!r.ok)throw Error();
+    document.getElementById('userDisplay').textContent=document.getElementById('profDisplayName').value.trim()||USERNAME;
+    btn.textContent='Saved!';setTimeout(()=>{btn.disabled=false;btn.textContent='Save Profile';},1200);
+  }catch{btn.disabled=false;btn.textContent='Save Profile';}
+}
+function toggleEmojiPicker(){document.getElementById('emojiPicker').classList.toggle('open');}
+function pickEmoji(e){document.getElementById('profAvatarEmoji').textContent=e;document.getElementById('emojiPicker').classList.remove('open');saveAvatarEmoji(e);}
+async function saveAvatarEmoji(e){
+  try{await fetch('/profile',{method:'PUT',headers:{'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'},body:JSON.stringify({avatar:e,avatar_type:'emoji'})});}
+  catch{}
+}
+
+// Profile View Modal (other users)
+let pvUsername='';
+function openProfileView(username){
+  pvUsername=username;
+  const m=document.getElementById('profileViewModal');
+  fetch('/profile/'+encodeURIComponent(username),{headers:{'Authorization':'Bearer '+TOKEN}})
+    .then(r=>r.json()).then(d=>{
+      const p=d.profile;
+      document.getElementById('pvAvatar').innerHTML=p.avatar_url?`<img src="${p.avatar_url}" style="width:56px;height:56px;border-radius:50%;object-fit:cover">`:p.avatar||'👤';
+      document.getElementById('pvName').textContent=p.display_name||username;
+      document.getElementById('pvBio').textContent=p.bio||'';
+      const prefsEl=document.getElementById('pvPrefs');
+      if(d.relationship==='friend'&&d.preferences){
+        const pr=d.preferences;
+        prefsEl.innerHTML=`<div style="display:flex;gap:6px;justify-content:center;flex-wrap:wrap">${pr.traveler_type?`<span class="tag">${pr.traveler_type}</span>`:''}${pr.budget_level?`<span class="tag">${pr.budget_level}</span>`:''}${pr.vibe?`<span class="tag">${pr.vibe}</span>`:''}</div>`;
+      }else{
+        prefsEl.innerHTML='<div style="color:var(--text-dim);font-size:13px">'+(d.relationship==='friend'?'No preferences set yet.':'')+'</div>';
+      }
+      const actions=document.getElementById('pvActions');
+      if(d.relationship==='friend'){
+        actions.innerHTML=`<button class="btn-msg" style="padding:8px 16px;border:none;border-radius:8px;background:var(--orange);color:#000;font-weight:600;cursor:pointer;font-family:inherit" onclick="closeProfileView();startChatWith('${username}')">💬 Message</button><button style="padding:8px 16px;border:1px solid var(--red);border-radius:8px;background:none;color:var(--red);font-weight:500;cursor:pointer;font-family:inherit" onclick="closeProfileView();unfriendUser('${username}')">Unfriend</button>`;
+      }else{
+        actions.innerHTML=`<button style="padding:8px 16px;border:none;border-radius:8px;background:var(--orange);color:#000;font-weight:600;cursor:pointer;font-family:inherit" onclick="closeProfileView();sendFriendReq('${username}')">+ Add Friend</button>`;
+      }
+      m.style.display='block';
+    }).catch(()=>{});
+}
+function closeProfileView(){document.getElementById('profileViewModal').style.display='none';}
+
+// ---- Friends Panel ----
+function openFriendsPanel(){
+  document.getElementById('friendsPanel').classList.add('open');
+  switchFTab('friends');
+}
+function closeFriendsPanel(){document.getElementById('friendsPanel').classList.remove('open');}
+let currentFTab='friends';
+function switchFTab(tab){
+  currentFTab=tab;
+  document.querySelectorAll('#friendsPanel .fp-tabs button').forEach(b=>b.classList.toggle('active',b.dataset.ftab===tab));
+  if(tab==='friends')loadFriendsList();
+  else if(tab==='requests')loadFriendRequests();
+  else if(tab==='search')loadFriendSearch();
+}
+async function loadFriendsList(){
+  const body=document.getElementById('fpBody');
+  try{
+    const r=await(await fetch('/friends',{headers:{'Authorization':'Bearer '+TOKEN}})).json();
+    if(!r.friends||!r.friends.length){
+      body.innerHTML='<div class="fp-empty">No friends yet.<br>Find people in the "Find People" tab!</div>';return;
+    }
+    body.innerHTML='<div style="font-size:12px;color:var(--text-dim);margin-bottom:8px">'+r.friends.length+' friend'+(r.friends.length!==1?'s':'')+'</div>'+
+      r.friends.map(f=>{
+        const av=f.avatar_url?`<img src="${f.avatar_url}">`:f.avatar||'👤';
+        return `<div class="fp-card"><div class="fp-avatar">${av}</div><div class="fp-info"><div class="fp-name">${esc(f.display_name)}</div><div class="fp-bio">${esc(f.bio)}</div></div><div class="fp-actions"><button class="btn-msg" onclick="startChatWith('${f.username}')">💬</button><button class="btn-unfriend" onclick="unfriendUser('${f.username}')">✕</button></div></div>`;
+      }).join('');
+  }catch{body.innerHTML='<div class="fp-empty">Error loading friends.</div>';}
+}
+async function loadFriendRequests(){
+  const body=document.getElementById('fpBody');
+  try{
+    const r=await(await fetch('/friends/requests',{headers:{'Authorization':'Bearer '+TOKEN}})).json();
+    let html='';
+    if(r.incoming&&r.incoming.length){
+      html+='<div style="font-size:13px;color:var(--text-dim);margin-bottom:8px">Incoming Requests</div>';
+      for(const req of r.incoming){
+        html+=`<div class="fp-card"><div class="fp-avatar">👤</div><div class="fp-info"><div class="fp-name">${esc(req.from_user)}</div><div class="fp-bio">Wants to be friends</div></div><div class="fp-actions"><button class="btn-accept" onclick="acceptReq('${req.id}')">✓</button><button class="btn-reject" onclick="rejectReq('${req.id}')">✕</button></div></div>`;
+      }
+    }
+    if(r.outgoing&&r.outgoing.length){
+      html+='<div style="font-size:13px;color:var(--text-dim);margin:8px 0">Sent Requests</div>';
+      for(const req of r.outgoing){
+        html+=`<div class="fp-card"><div class="fp-avatar">👤</div><div class="fp-info"><div class="fp-name">${esc(req.to_user)}</div><div class="fp-bio">Pending...</div></div></div>`;
+      }
+    }
+    body.innerHTML=html||'<div class="fp-empty">No pending requests.</div>';
+  }catch{body.innerHTML='<div class="fp-empty">Error loading requests.</div>';}
+}
+function loadFriendSearch(){
+  const body=document.getElementById('fpBody');
+  body.innerHTML=`<input class="search-input" id="fsSearch" placeholder="Search by username..." oninput="doFriendSearch(this.value)"><div id="fsResults"></div>`;
+}
+async function doFriendSearch(q){
+  if(!q||q.length<2){document.getElementById('fsResults').innerHTML='';return;}
+  try{
+    const r=await(await fetch('/friends/search?q='+encodeURIComponent(q),{headers:{'Authorization':'Bearer '+TOKEN}})).json();
+    const c=document.getElementById('fsResults');
+    if(!r.results||!r.results.length){c.innerHTML='<div class="fp-empty">No users found.</div>';return;}
+    c.innerHTML=r.results.map(u=>`<div class="fp-card"><div class="fp-avatar">👤</div><div class="fp-info"><div class="fp-name">${esc(u.username)}</div></div><div class="fp-actions"><button class="btn-add" onclick="sendFriendReq('${u.username}')">+ Add</button></div></div>`).join('');
+  }catch{}
+}
+async function sendFriendReq(username){
+  try{
+    const r=await fetch('/friends/request',{method:'POST',headers:{'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'},body:JSON.stringify({username})});
+    if(r.ok){alert('Friend request sent!');if(currentFTab==='requests')loadFriendRequests();else switchFTab('requests');}
+    else{const d=await r.json();alert(d.detail||'Error');}
+  }catch{alert('Error sending request');}
+}
+async function acceptReq(id){
+  try{
+    const r=await fetch('/friends/accept',{method:'POST',headers:{'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'},body:JSON.stringify({request_id:id})});
+    if(r.ok){loadFriendRequests();refreshFriendsBadge();}
+  }catch{}
+}
+async function rejectReq(id){
+  try{
+    await fetch('/friends/reject',{method:'POST',headers:{'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'},body:JSON.stringify({request_id:id})});
+    loadFriendRequests();refreshFriendsBadge();
+  }catch{}
+}
+async function unfriendUser(username){
+  if(!confirm('Unfriend '+username+'?'))return;
+  try{
+    await fetch('/friends/unfriend',{method:'POST',headers:{'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'},body:JSON.stringify({username})});
+    loadFriendsList();
+  }catch{}
+}
+async function refreshFriendsBadge(){
+  try{
+    const r=await(await fetch('/friends/requests',{headers:{'Authorization':'Bearer '+TOKEN}})).json();
+    const cnt=(r.incoming||[]).length;
+    const b=document.getElementById('friendsBadge');
+    if(cnt){b.textContent=cnt;b.style.display='';}else{b.style.display='none';}
+    const tb=document.getElementById('reqBadge');
+    if(tb&&cnt){tb.textContent=cnt;tb.style.display='';}else if(tb){tb.style.display='none';}
+  }catch{}
+}
+
+// ---- Chat Panel ----
+let chatAC=null, chatConvId=null, chatUserMap={};
+function openChatPanel(){
+  document.getElementById('chatPanel').classList.add('open');
+  closeChatConv();
+  loadConversations();
+}
+function closeChatPanel(){
+  if(chatAC){try{chatAC.abort();}catch{}chatAC=null;}
+  document.getElementById('chatPanel').classList.remove('open');
+}
+function closeChatConv(){
+  chatConvId=null;
+  document.getElementById('chBackBtn').style.display='none';
+  document.getElementById('chTitle').innerHTML='<span>Messages</span>';
+  document.getElementById('chConvView').classList.remove('active');
+  document.getElementById('chConvList').style.display='';
+  if(chatAC){try{chatAC.abort();}catch{}chatAC=null;}
+}
+async function loadConversations(){
+  const list=document.getElementById('chConvList'); list.style.display='';
+  document.getElementById('chConvView').classList.remove('active');
+  try{
+    const r=await(await fetch('/chat/conversations',{headers:{'Authorization':'Bearer '+TOKEN}})).json();
+    if(!r.conversations||!r.conversations.length){
+      list.innerHTML='<div class="fp-empty">No conversations yet.<br>Go to Friends to start chatting!</div>';return;
+    }
+    list.innerHTML=r.conversations.map(c=>{
+      const other=c.participants.find(p=>p!==USERNAME)||'';
+      const info=chatUserMap[other]||{};
+      const av=info.avatar_url?`<img src="${info.avatar_url}">`:info.avatar||'👤';
+      const name=info.display_name||other;
+      const unread=c.unread&&c.unread[USERNAME]?c.unread[USERNAME]:0;
+      const last=c.last_message||{};
+      const time=last.created_at?new Date(last.created_at).toLocaleDateString():'';
+      return `<div class="ch-conv-item" onclick="openChatConv('${c.id}','${other}')">
+        <div class="ch-cavatar">${av}</div>
+        <div class="ch-info">
+          <div class="ch-cname">${esc(name)}</div>
+          <div class="ch-preview">${esc(last.text||'')}</div>
+          <div class="ch-time">${time}</div>
+        </div>
+        ${unread?`<div class="ch-unread"></div>`:''}
+      </div>`;
+    }).join('');
+  }catch{list.innerHTML='<div class="fp-empty">Error loading conversations.</div>';}
+}
+async function startChatWith(username){
+  closeChatPanel();openChatPanel();
+  try{
+    // Try to find existing conversation
+    const r=await(await fetch('/chat/conversations',{headers:{'Authorization':'Bearer '+TOKEN}})).json();
+    const existing=(r.conversations||[]).find(c=>c.participants.includes(username));
+    if(existing){openChatConv(existing.id,username);return;}
+    // Create new
+    const cr=await fetch('/chat/conversations',{method:'POST',headers:{'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'},body:JSON.stringify({participant:username})});
+    const cd=await cr.json();
+    openChatConv(cd.conversation.id,username);
+  }catch{alert('Error starting conversation');}
+}
+async function openChatConv(convId,otherUsername){
+  chatConvId=convId;
+  document.getElementById('chConvList').style.display='none';
+  document.getElementById('chBackBtn').style.display='';
+  document.getElementById('chConvView').classList.add('active');
+  // Load other user's profile for display
+  try{
+    const pr=await(await fetch('/profile/'+encodeURIComponent(otherUsername),{headers:{'Authorization':'Bearer '+TOKEN}})).json();
+    chatUserMap[otherUsername]=pr.profile||{};
+    const av=pr.profile.avatar_url?`<img src="${pr.profile.avatar_url}" style="width:20px;height:20px;border-radius:50%;vertical-align:middle">`:pr.profile.avatar||'👤';
+    document.getElementById('chTitle').innerHTML=av+' '+esc(pr.profile.display_name||otherUsername);
+  }catch{
+    document.getElementById('chTitle').textContent=otherUsername;
+  }
+  document.getElementById('chInput').disabled=false;
+  document.getElementById('chSendBtn').disabled=false;
+  loadMessages(convId);
+  subscribeConv(convId);
+}
+async function loadMessages(convId){
+  const c=document.getElementById('chMessages'); c.innerHTML='';
+  try{
+    const r=await(await fetch('/chat/conversations/'+convId+'/messages',{headers:{'Authorization':'Bearer '+TOKEN}})).json();
+    const msgs=r.messages||[];
+    if(!msgs.length){c.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-dim);font-size:14px">No messages yet. Say hi!</div>';return;}
+    c.innerHTML=msgs.map(m=>{
+      const own=m.from===USERNAME;
+      return `<div class="ch-msg ${own?'own':'other'}"><div class="ch-bubble">${esc(m.text)}<div class="ch-time">${new Date(m.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div></div></div>`;
+    }).join('');
+    c.scrollTop=c.scrollHeight;
+    // Mark read
+    fetch('/chat/conversations/'+convId+'/read',{method:'POST',headers:{'Authorization':'Bearer '+TOKEN}}).catch(()=>{});
+    refreshChatBadge();
+  }catch{}
+}
+async function sendChatMsg(){
+  if(!chatConvId)return;
+  const input=document.getElementById('chInput');
+  const text=input.value.trim();
+  if(!text)return;
+  input.value='';
+  try{
+    const r=await fetch('/chat/conversations/'+chatConvId+'/messages',{method:'POST',headers:{'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'},body:JSON.stringify({text})});
+    if(!r.ok)throw Error();
+    const m=await r.json();
+    // Add message immediately
+    const c=document.getElementById('chMessages');
+    c.innerHTML+=`<div class="ch-msg own"><div class="ch-bubble">${esc(m.message.text)}<div class="ch-time">Just now</div></div></div>`;
+    c.scrollTop=c.scrollHeight;
+  }catch{alert('Error sending message');}
+}
+function subscribeConv(convId){
+  if(chatAC){try{chatAC.abort();}catch{}chatAC=null;}
+  chatAC=new AbortController();
+  fetch('/chat/conversations/'+convId+'/subscribe?user='+encodeURIComponent(USERNAME),{signal:chatAC.signal})
+    .then(async r=>{
+      if(!r.ok)throw Error();
+      const reader=r.body.getReader(),decoder=new TextDecoder();
+      let buf='';
+      function read(){
+        reader.read().then(({done,value})=>{
+          if(done)return;
+          buf+=decoder.decode(value,{stream:true});
+          const lines=buf.split('\n');buf=lines.pop()||'';
+          for(const line of lines){
+            if(!line.startsWith('data: '))continue;
+            try{
+              const d=JSON.parse(line.slice(6));
+              if(d.type==='message'&&d.from!==USERNAME){
+                const c=document.getElementById('chMessages');
+                c.innerHTML+=`<div class="ch-msg other"><div class="ch-bubble">${esc(d.text)}<div class="ch-time">Just now</div></div></div>`;
+                c.scrollTop=c.scrollHeight;
+              }
+            }catch{}
+          }
+          if(!done)read();
+        }).catch(()=>{});
+      }
+      read();
+    }).catch(()=>{});
+}
+async function refreshChatBadge(){
+  try{
+    const r=await(await fetch('/chat/conversations',{headers:{'Authorization':'Bearer '+TOKEN}})).json();
+    const total=(r.conversations||[]).reduce((s,c)=>{const u=c.unread||{};return s+(u[USERNAME]||0);},0);
+    const b=document.getElementById('chatBadge');
+    if(total){b.textContent=total;b.style.display='';}else{b.style.display='none';}
+  }catch{}
+}
+// Refresh badges periodically
+setInterval(()=>{if(TOKEN&&!document.getElementById('authGate').classList.contains('hidden'))return;refreshFriendsBadge();refreshChatBadge();},15000);
+
+// ---- Theme Toggle ----
+let darkTheme = localStorage.getItem('voyage_theme') !== 'light';
+function applyTheme() {
+  document.body.classList.toggle('light', !darkTheme);
+  document.getElementById('themeBtn').textContent = darkTheme ? '☀' : '☾';
+}
+function toggleTheme() {
+  darkTheme = !darkTheme;
+  localStorage.setItem('voyage_theme', darkTheme ? 'dark' : 'light');
+  applyTheme();
+}
+applyTheme();
+</script>
+</body>
+</html>
