@@ -22,9 +22,6 @@ COPY . .
 # Make entrypoint executable
 RUN chmod +x entrypoint.sh
 
-# Data volume for persistence
-VOLUME /data
-
 # Environment defaults
 ENV CONFIG_PATH=/app/config.docker.yaml \
     DATA_DIR=/data \
