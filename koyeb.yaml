@@ -1,0 +1,36 @@
+name: cairo-qa
+docker:
+  dockerfile: Dockerfile
+  ports:
+    - port: 8000
+      protocol: http
+env:
+  - key: CONFIG_PATH
+    value: /app/config.docker.yaml
+  - key: DATA_DIR
+    value: /data
+  - key: DB_PATH
+    value: /data/places.duckdb
+  - key: VECTOR_STORE_PATH
+    value: /data/chroma_db
+  - key: CSV_DIR
+    value: /app/data/csv
+routes:
+  - path: /
+    port: 8000
+healthchecks:
+  - port: 8000
+    path: /health
+    interval: 30
+    timeout: 10
+    initial_delay: 10
+    retries: 3
+volumes:
+  - name: cairoqa_data
+    path: /data
+    size: 1
+features:
+  - app-lifecycle
+scalings:
+  - min: 1
+    max: 1
