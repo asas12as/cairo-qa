@@ -1,7 +1,12 @@
 import chromadb
 from chromadb.api.types import EmbeddingFunction, Embeddings
 from chromadb.config import Settings
-from chromadb.errors import NotFoundError
+
+try:
+    from chromadb.errors import NotFoundError
+    _COLLECTION_NOT_FOUND = (ValueError, NotFoundError)
+except ImportError:
+    _COLLECTION_NOT_FOUND = (ValueError,)
 
 
 class _EmbeddingFn(EmbeddingFunction):
@@ -28,7 +33,7 @@ class VectorStore:
             self.collection = self.client.get_collection(
                 self.collection_name, embedding_function=ef
             )
-        except (ValueError, NotFoundError):
+        except _COLLECTION_NOT_FOUND:
             self.collection = self.client.create_collection(
                 self.collection_name, embedding_function=ef
             )
@@ -37,7 +42,7 @@ class VectorStore:
     def delete_collection(self):
         try:
             self.client.delete_collection(self.collection_name)
-        except (ValueError, NotFoundError):
+        except _COLLECTION_NOT_FOUND:
             pass
         self.collection = None
 
