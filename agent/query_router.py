@@ -136,6 +136,7 @@ class QueryRouter:
             "semantic_query": semantic_query,
             "type": query_type,
             "_is_plan": is_plan,
+            "_is_daily_budget": is_daily,
             "_budget": budget_val,
             "_days": days_val,
         }
