@@ -134,7 +134,7 @@ def handle_question(user_id: str | None, question: str, companion_ids: list[str]
 
     companion_profiles, companion_names, companion_context = _build_companion_context(user_id, companion_ids or [])
 
-    route_info = ctx.router_agent.route(question)
+    route_info = ctx.router_agent.route(question, history)
 
     if user_id:
         acc_budget, acc_days = ctx.memory.get_accumulated_params(user_id, question)
@@ -201,7 +201,7 @@ def handle_question_stream(user_id: str | None, question: str, companion_ids: li
 
     companion_profiles, companion_names, companion_context = _build_companion_context(user_id, companion_ids or [])
 
-    route_info = ctx.router_agent.route(question)
+    route_info = ctx.router_agent.route(question, history)
 
     if user_id:
         acc_budget, acc_days = ctx.memory.get_accumulated_params(user_id, question)

@@ -80,21 +80,24 @@ class QueryRouter:
     def __init__(self, llm=None):
         self.llm = llm
 
-    def route(self, question: str) -> dict:
+    def route(self, question: str, history: list[dict] = None) -> dict:
         if self.llm:
             try:
-                parsed = self._parse_llm(question)
+                parsed = self._parse_llm(question, history or [])
                 if parsed and parsed.get("error") is None:
                     return self._build_route(parsed, question)
             except Exception:
                 pass
         return self._route_fallback(question)
 
-    def _parse_llm(self, question: str) -> dict | None:
+    def _parse_llm(self, question: str, history: list[dict]) -> dict | None:
         messages = [
             {"role": "system", "content": LLM_PARSE_SYSTEM},
-            {"role": "user", "content": f"Q: {question}"},
         ]
+        for h in history[-4:]:
+            messages.append({"role": "user", "content": h["question"]})
+            messages.append({"role": "assistant", "content": h["answer"][:300]})
+        messages.append({"role": "user", "content": f"Q: {question}"})
         raw = self.llm.chat(messages, max_tokens=200, temperature=0.0)
         raw = raw.strip()
         if raw.startswith("```"):
