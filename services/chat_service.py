@@ -166,7 +166,7 @@ def handle_question(user_id: str | None, question: str, companion_ids: list[str]
         budget = _derive_budget(route_info, profile)
         if agg.get("budget_level_min") and agg["budget_level_min"] < budget:
             budget = agg["budget_level_min"]
-        days = route_info.get("_days", 1)
+        days = route_info.get("_days") or 1
         comps_per_person = len(companion_names) + 1
         answer, recommended = render_budget_plan(context, budget * comps_per_person, days, profile=profile)
         display_places = recommended
@@ -230,7 +230,7 @@ def handle_question_stream(user_id: str | None, question: str, companion_ids: li
         budget = _derive_budget(route_info, profile)
         if agg.get("budget_level_min") and agg["budget_level_min"] < budget:
             budget = agg["budget_level_min"]
-        days = route_info.get("_days", 1)
+        days = route_info.get("_days") or 1
         comps_per_person = len(companion_names) + 1
         full_answer, recommended = render_budget_plan(context, budget * comps_per_person, days, profile=profile)
         display_places = recommended
