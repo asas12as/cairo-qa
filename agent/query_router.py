@@ -114,6 +114,7 @@ class QueryRouter:
 
         if budget_val is not None and is_daily and days_val:
             budget_val = budget_val * days_val
+            is_daily = False
 
         filters = {}
         if parsed.get("category"):
