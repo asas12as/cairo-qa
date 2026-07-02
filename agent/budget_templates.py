@@ -17,6 +17,16 @@ PREF_CATEGORY_COUNT = {
     "relaxed": 3,
 }
 
+DAY_THEMES = [
+    "Arrival & Local Exploration",
+    "Iconic Cairo — History & Pyramids",
+    "Cultural Immersion — Museums & Old Cairo",
+    "Food Tour & Local Neighborhoods",
+    "Hidden Gems & Off the Beaten Path",
+    "Nile Life & Modern Cairo",
+    "Relaxed Farewell & Departure",
+]
+
 
 def _budget_score(budget_level: str) -> float:
     if not budget_level:
@@ -77,7 +87,6 @@ def render_budget_plan(context: list[dict], total_budget: int, days: int,
     nightlife = [r for r in context if r.get("category") and r["category"].lower() == "nightlife"]
 
     traveler_type = (profile or {}).get("traveler_type", "balanced")
-    vibe = (profile or {}).get("vibe", "balanced")
 
     recommended = []
     lines = []
@@ -99,16 +108,18 @@ def render_budget_plan(context: list[dict], total_budget: int, days: int,
             lines.append(f"   *Alternatives: {alt}*")
         lines.append("")
 
-    # ---- Select places across categories ----
-    rest_selected = _pick(restaurants, 5, target_score, daily_budget)
-    attr_selected = _pick(attractions, 5, target_score, daily_budget)
+    # ---- Select enough places for all days ----
+    rest_count = max(days * 2 + 1, 5)
+    attr_count = max(days + 1, 5)
+    rest_selected = _pick(restaurants, rest_count, target_score, daily_budget)
+    attr_selected = _pick(attractions, attr_count, target_score, daily_budget)
     cafe_selected = _pick(cafes, 1, target_score, daily_budget)
     night_selected = _pick(nightlife, 3, target_score, daily_budget)
 
     if not rest_selected:
-        rest_selected = sorted(restaurants, key=lambda r: -(r.get("rating") or 0))[:5]
+        rest_selected = sorted(restaurants, key=lambda r: -(r.get("rating") or 0))[:rest_count]
     if not attr_selected:
-        attr_selected = sorted(attractions, key=lambda a: -(a.get("rating") or 0))[:5]
+        attr_selected = sorted(attractions, key=lambda a: -(a.get("rating") or 0))[:attr_count]
 
     recommended.extend(rest_selected)
     recommended.extend(attr_selected)
@@ -143,69 +154,54 @@ def render_budget_plan(context: list[dict], total_budget: int, days: int,
             return f"   *{meal}: grab something local / street food*"
         return f"   *{meal}:* {_fmt_place(p)}"
 
-    budget_per_day = total_budget // days
+    for day_num in range(1, days + 1):
+        if day_num <= len(DAY_THEMES):
+            theme = DAY_THEMES[day_num - 1]
+        else:
+            theme = f"Day {day_num} — Explore & Enjoy"
 
-    lines.append(_day_header(1, "Arrival & Local Exploration"))
-    lines.append(f"   Check into {hotel_name}. Settle in and take a walk around the neighborhood.")
-    if cafe_selected:
-        lines.append(f"   *Afternoon coffee:* {_fmt_place(cafe_selected[0])}")
-    r1 = _pop_rest()
-    lines.append(_fmt_meal("Dinner", r1))
-    if traveler_type == "nightlife" and night_selected:
-        lines.append(f"   *Evening:* {_fmt_place(night_selected[0])}")
-    lines.append(f"   *Daily spend: ~{budget_per_day} EGP*")
+        lines.append(_day_header(day_num, theme))
 
-    lines.append(_day_header(2, "Iconic Cairo — History & Pyramids"))
-    lines.append(f"   Start early from {hotel_name}.")
-    a1, a2 = _pop_attr(), _pop_attr()
-    lines.append(f"   *Morning:* {_fmt_place(a1) if a1 else 'Explore Giza Pyramids area'}")
-    lines.append(f"   *Afternoon:* {_fmt_place(a2) if a2 else 'Visit the Grand Egyptian Museum'}")
-    r2 = _pop_rest()
-    lines.append(_fmt_meal("Lunch", r2))
-    r3 = _pop_rest()
-    lines.append(_fmt_meal("Dinner", r3))
-    lines.append(f"   *Daily spend: ~{budget_per_day} EGP*")
+        if day_num == 1:
+            lines.append(f"   Check into {hotel_name}. Settle in and take a walk around the neighborhood.")
+            if cafe_selected:
+                lines.append(f"   *Afternoon coffee:* {_fmt_place(cafe_selected[0])}")
+            r = _pop_rest()
+            lines.append(_fmt_meal("Dinner", r))
+            if traveler_type == "nightlife" and night_selected:
+                lines.append(f"   *Evening:* {_fmt_place(night_selected[0])}")
+        elif day_num == days:
+            lines.append(f"   Last day! Enjoy a slow morning around {hotel_name}.")
+            r = _pop_rest()
+            lines.append(_fmt_meal("Breakfast / Brunch", r))
+            a = _pop_attr()
+            if a:
+                lines.append(f"   *Morning:* {_fmt_place(a)}")
+            else:
+                lines.append(f"   *Morning:* Last-minute souvenir shopping at Khan el-Khalili")
+            lines.append(f"   *Afternoon:* Check out and head to airport.")
+        else:
+            if day_num == 2:
+                lines.append(f"   Start early from {hotel_name}.")
+            elif day_num == 4:
+                lines.append(f"   Today is about eating your way through Cairo! Start from {hotel_name}.")
+                lines.append(f"   *Morning walk:* Explore Zamalek or Downtown Cairo")
+            else:
+                lines.append(f"   Head out from {hotel_name} for a day of exploration.")
 
-    lines.append(_day_header(3, "Cultural Immersion — Museums & Old Cairo"))
-    lines.append(f"   Head to central Cairo from {hotel_name}.")
-    a3, a4 = _pop_attr(), _pop_attr()
-    lines.append(f"   *Morning:* {_fmt_place(a3) if a3 else 'National Museum of Egyptian Civilization'}")
-    lines.append(f"   *Afternoon:* {_fmt_place(a4) if a4 else 'Explore Islamic Cairo / Khan el-Khalili'}")
-    r4 = _pop_rest()
-    lines.append(_fmt_meal("Lunch", r4))
-    r5 = _pop_rest()
-    lines.append(_fmt_meal("Dinner", r5))
-    if traveler_type == "nightlife" and len(night_selected) > 1:
-        lines.append(f"   *Evening:* {_fmt_place(night_selected[1])}")
-    lines.append(f"   *Daily spend: ~{budget_per_day} EGP*")
+            a1 = _pop_attr()
+            a2 = _pop_attr()
+            lines.append(f"   *Morning:* {_fmt_place(a1) if a1 else 'Explore a local neighborhood'}")
+            lines.append(f"   *Afternoon:* {_fmt_place(a2) if a2 else 'Visit a nearby attraction'}")
+            r1 = _pop_rest()
+            r2 = _pop_rest()
+            lines.append(_fmt_meal("Lunch", r1))
+            lines.append(_fmt_meal("Dinner", r2))
 
-    lines.append(_day_header(4, "Food Tour & Local Neighborhoods"))
-    lines.append(f"   Today is about eating your way through Cairo! Start from {hotel_name}.")
-    lines.append(f"   *Morning walk:* Explore Zamalek or Downtown Cairo")
-    r6, r7, r8 = _pop_rest(), _pop_rest(), _pop_rest()
-    lines.append(_fmt_meal("Brunch", r6))
-    lines.append(_fmt_meal("Lunch", r7))
-    if cafe_selected:
-        lines.append(f"   *Afternoon break:* {_fmt_place(cafe_selected[0])}")
-    a5 = _pop_attr()
-    if a5:
-        lines.append(f"   *Late afternoon:* {_fmt_place(a5)}")
-    lines.append(_fmt_meal("Dinner", r8))
-    if traveler_type == "nightlife" and len(night_selected) > 2:
-        lines.append(f"   *Evening:* {_fmt_place(night_selected[2])}")
-    lines.append(f"   *Daily spend: ~{budget_per_day} EGP*")
+            if traveler_type == "nightlife" and day_num <= len(night_selected):
+                lines.append(f"   *Evening:* {_fmt_place(night_selected[day_num - 1])}")
 
-    lines.append(_day_header(5, "Relaxed Farewell & Departure"))
-    lines.append(f"   Last day! Enjoy a slow morning around {hotel_name}.")
-    r9 = _pop_rest()
-    lines.append(_fmt_meal("Breakfast / Brunch", r9))
-    a6 = _pop_attr()
-    if a6:
-        lines.append(f"   *Morning:* {_fmt_place(a6)}")
-    else:
-        lines.append(f"   *Morning:* Last-minute souvenir shopping at Khan el-Khalili")
-    lines.append(f"   *Afternoon:* Check out and head to airport.")
-    lines.append(f"   *Daily spend: ~{budget_per_day} EGP*")
+        lines.append(f"   *Daily spend: ~{daily_budget} EGP*")
 
     # ---- Budget breakdown ----
     hotel_pct = 0.35 if traveler_type == "foodie" else 0.45

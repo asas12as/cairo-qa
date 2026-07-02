@@ -27,6 +27,7 @@ GENRE_KEYWORDS = {
 }
 
 BUDGET_PATTERN = re.compile(r"(\d+)\s*-?\s*(?:egp|le|pounds?|usd)", re.IGNORECASE)
+DAILY_BUDGET_PATTERN = re.compile(r"(?:daily|per\s*day|/day|per\s*person\s*per\s*day)\s*(?:budget\s*)?(?:of\s*)?(\d+)", re.IGNORECASE)
 RATING_PATTERN = re.compile(r"(?:rating|rated|stars?)\s*(?:of\s*)?(\d+(?:\.\d+)?)", re.IGNORECASE)
 DAYS_PATTERN = re.compile(r"(\d+)\s*-?\s*(?:days?|nights?)", re.IGNORECASE)
 
@@ -148,6 +149,11 @@ class QueryRouter:
                 days_val = int(digits[-1])
 
         # Plan detection
+        if budget_val is not None and days_val is not None:
+            daily_m = DAILY_BUDGET_PATTERN.search(q_norm)
+            if daily_m and int(daily_m.group(1)) == budget_val:
+                budget_val = budget_val * days_val
+
         has_plan_kw = any(kw in q_lower for kw in PLAN_KEYWORDS) or bool(ARABIC_PLAN.search(q_norm))
         has_budget_and_days = budget_val is not None and days_val is not None
         is_plan = has_budget_and_days or (days_val is not None and has_plan_kw)
