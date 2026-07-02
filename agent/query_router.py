@@ -1,4 +1,5 @@
 import re
+import json
 
 CATEGORY_KEYWORDS = {
     "restaurant": ["restaurant", "eat", "dining", "dinner", "lunch", "breakfast", "food", "cuisine"],
@@ -30,29 +31,113 @@ BUDGET_PATTERN = re.compile(r"(\d+)\s*-?\s*(?:egp|le|pounds?|usd)", re.IGNORECAS
 DAILY_BUDGET_PATTERN = re.compile(r"(?:daily|per\s*day|/day|a\s*day|per\s*person\s*per\s*day|فاليوم|في\s*اليوم|في\s*اليوم\s*الواحد)\s*(?:budget\s*)?(?:of\s*)?(\d+)|(\d+)\s*(?:per\s*day|/day|a\s*day|فاليوم|في\s*اليوم)", re.IGNORECASE)
 RATING_PATTERN = re.compile(r"(?:rating|rated|stars?)\s*(?:of\s*)?(\d+(?:\.\d+)?)", re.IGNORECASE)
 DAYS_PATTERN = re.compile(r"(\d+)\s*-?\s*(?:days?|nights?)", re.IGNORECASE)
-
-# Fallback patterns for budget without suffix: "only 6000", "6000 for 5 days"
 BARE_BUDGET = re.compile(r"(?:only|have|budget|around|about|limited|total|معايا|عندي|فقط|ميزانية)\s*(\d+)", re.IGNORECASE)
 FOR_X_DAYS = re.compile(r"(\d+)\s*(?:for|in|over|لمدة|فى|في)\s*(\d+)\s*-?\s*(?:days?|nights?|ايام|يوم|ليلة|ليالي)", re.IGNORECASE)
-
-# Bare Arabic budget: numbers without currency suffix appearing before budget-related words
 ARABIC_BARE_BUDGET = re.compile(r"(\d+)\s*(?:جنيه|جنية|جم|EGP)", re.IGNORECASE)
-
-# Arabic patterns
 ARABIC_DIGITS = str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")
 ARABIC_DAYS = re.compile(r"(?:^|\s|و)(?:يوم|ايام|ليلة|ليالي)(?:\s|$|,|\.)", re.IGNORECASE)
 ARABIC_BUDGET = re.compile(r"(\d+)\s*(?:جنيه|جنية|جم|فاليوم|في\s*اليوم)", re.IGNORECASE)
 ARABIC_PLAN = re.compile(r"(?:رحلة|خطة| itinerary|برنامج)", re.IGNORECASE)
 ARABIC_DAILY_BUDGET = re.compile(r"(\d+)\s*(?:فاليوم|في\s*اليوم|في\s*اليوم\s*الواحد)", re.IGNORECASE)
-
 PLAN_KEYWORDS = {"plan", "itinerary", "trip", "schedule", "tour"}
+
+LLM_PARSE_SYSTEM = """You are a query parser for a Cairo travel assistant. Extract structured fields from the user's question about visiting Cairo, Egypt.
+
+Return ONLY valid JSON with these fields (no markdown, no explanation):
+- "budget": integer or null — the budget amount in EGP. If the user says "daily budget of X" or "X per day", put X here and set is_daily_budget=true.
+- "is_daily_budget": true if the budget is per day, false if total or absent
+- "days": integer or null — number of days for the trip
+- "category": one of "restaurant", "hotel", "attraction", "cafe", or null
+- "neighborhood": neighborhood/district name or null (e.g. zamalek, downtown, maadi, heliopolis, giza)
+- "genre": cuisine/type like "italian", "seafood", "grill", or null
+- "min_rating": number 1-5 or null
+- "is_plan": true if asking for an itinerary/trip plan/schedule
+- "semantic_query": extract key search terms (2-6 words) from the question for database matching, or null
+- "error": null, or a brief description if the query can't be understood
+
+Examples:
+Q: "Plan a 5-day trip to Cairo for a family with a daily budget of 1500 EGP per person"
+A: {"budget": 1500, "is_daily_budget": true, "days": 5, "category": null, "neighborhood": null, "genre": null, "min_rating": null, "is_plan": true, "semantic_query": "family trip Cairo", "error": null}
+
+Q: "what are the best restaurants in Zamalek?"
+A: {"budget": null, "is_daily_budget": false, "days": null, "category": "restaurant", "neighborhood": "zamalek", "genre": null, "min_rating": null, "is_plan": false, "semantic_query": "best restaurants", "error": null}
+
+Q: "I need a cheap hotel under 1000 EGP near downtown"
+A: {"budget": 1000, "is_daily_budget": false, "days": null, "category": "hotel", "neighborhood": "downtown", "genre": null, "min_rating": null, "is_plan": false, "semantic_query": "cheap hotel downtown", "error": null}
+
+Q: "tell me about the pyramids"
+A: {"budget": null, "is_daily_budget": false, "days": null, "category": "attraction", "neighborhood": null, "genre": null, "min_rating": null, "is_plan": false, "semantic_query": "pyramids Giza", "error": null}
+
+Q: "what's the weather like?"
+A: {"budget": null, "is_daily_budget": false, "days": null, "category": null, "neighborhood": null, "genre": null, "min_rating": null, "is_plan": false, "semantic_query": null, "error": "not a travel query"}
+
+Q: "2000 EGP for 3 days in Cairo"
+A: {"budget": 2000, "is_daily_budget": false, "days": 3, "category": null, "neighborhood": null, "genre": null, "min_rating": null, "is_plan": true, "semantic_query": "Cairo trip", "error": null}
+"""
 
 
 class QueryRouter:
-    def __init__(self):
-        pass
+    def __init__(self, llm=None):
+        self.llm = llm
 
     def route(self, question: str) -> dict:
+        if self.llm:
+            try:
+                parsed = self._parse_llm(question)
+                if parsed and parsed.get("error") is None:
+                    return self._build_route(parsed, question)
+            except Exception:
+                pass
+        return self._route_fallback(question)
+
+    def _parse_llm(self, question: str) -> dict | None:
+        messages = [
+            {"role": "system", "content": LLM_PARSE_SYSTEM},
+            {"role": "user", "content": f"Q: {question}"},
+        ]
+        raw = self.llm.chat(messages, max_tokens=200, temperature=0.0)
+        raw = raw.strip()
+        if raw.startswith("```"):
+            raw = raw.split("\n", 1)[1] if "\n" in raw else raw[3:]
+            if raw.endswith("```"):
+                raw = raw[:-3]
+            raw = raw.strip()
+        return json.loads(raw)
+
+    def _build_route(self, parsed: dict, original_question: str) -> dict:
+        budget_val = parsed.get("budget")
+        days_val = parsed.get("days")
+        is_daily = parsed.get("is_daily_budget", False)
+
+        if budget_val is not None and is_daily and days_val:
+            budget_val = budget_val * days_val
+
+        filters = {}
+        if parsed.get("category"):
+            filters["category"] = parsed["category"]
+        if parsed.get("neighborhood"):
+            filters["neighborhood"] = parsed["neighborhood"]
+        if parsed.get("genre"):
+            filters["genre"] = parsed["genre"]
+        if budget_val is not None:
+            filters["max_budget"] = budget_val
+        if parsed.get("min_rating"):
+            filters["min_rating"] = parsed["min_rating"]
+
+        semantic_query = parsed.get("semantic_query") or original_question
+        is_plan = parsed.get("is_plan", False) or (budget_val is not None and days_val is not None)
+        query_type = "plan" if is_plan else ("hybrid" if len(filters) > 0 else "semantic")
+
+        return {
+            "filters": filters,
+            "semantic_query": semantic_query,
+            "type": query_type,
+            "_is_plan": is_plan,
+            "_budget": budget_val,
+            "_days": days_val,
+        }
+
+    def _route_fallback(self, question: str) -> dict:
         q_lower = question.lower()
         q_norm = q_lower.translate(ARABIC_DIGITS)
         filters = {}
@@ -74,7 +159,6 @@ class QueryRouter:
                 semantic_terms.append(genre)
                 break
 
-        # Budget detection (multiple strategies)
         budget_val = None
         days_val = None
         for_x = FOR_X_DAYS.search(q_norm)
@@ -98,7 +182,6 @@ class QueryRouter:
             if m:
                 budget_val = int(m.group(1))
 
-        # Bare standalone number (3-6 digits) as budget
         if budget_val is None:
             m = re.search(r"(?:^|\s)(\d{3,6})(?:\s|$)", q_norm)
             if m:
@@ -111,14 +194,12 @@ class QueryRouter:
         if budget_val is not None:
             filters["max_budget"] = budget_val
 
-        # Rating
         rating_match = RATING_PATTERN.search(q_lower)
         if rating_match:
             filters["min_rating"] = float(rating_match.group(1))
 
         has_filters = len([k for k in filters if filters[k] is not None]) > 0
 
-        # Semantic query
         stopwords = {"a", "an", "the", "in", "at", "for", "to", "with", "and", "or",
                      "of", "i", "have", "my", "is", "are", "do", "does", "what",
                      "where", "which", "how", "much", "many", "can", "you", "recommend"}
@@ -136,7 +217,6 @@ class QueryRouter:
         if not semantic_query:
             semantic_query = q_lower
 
-        # Day detection
         m = DAYS_PATTERN.search(q_norm)
         if m:
             days_val = int(m.group(1))
@@ -156,7 +236,6 @@ class QueryRouter:
                 if candidate_days and candidate_days <= 365:
                     days_val = candidate_days
 
-        # Plan detection
         if budget_val is not None and days_val is not None:
             daily_m = DAILY_BUDGET_PATTERN.search(q_norm) or ARABIC_DAILY_BUDGET.search(q_norm)
             daily_match_val = None

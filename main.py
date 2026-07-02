@@ -86,7 +86,7 @@ def main():
     from core import data_path
 
     ctx.retriever = HybridRetriever(ctx.db, vector_store)
-    ctx.router_agent = QueryRouter()
+    ctx.router_agent = QueryRouter(ctx.llm)
     ctx.answer_gen = AnswerGenerator(ctx.llm)
     ctx.logger = ConversationLogger(data_path("conversations"))
     ctx.prefs = UserPreferences(data_path("user_profiles"))
