@@ -40,18 +40,25 @@ def _target_budget_score(profile: dict | None) -> float:
 
 
 def _hotel_fit_score(row: dict, daily_budget: int, target_score: float) -> float:
-    max_p = row.get("budget_range_max") or 0
     min_p = row.get("budget_range_min") or 0
+    max_p = row.get("budget_range_max") or 0
     if max_p <= 0:
         return 999
     avg = (min_p + max_p) / 2
-    price_diff = abs(avg - daily_budget)
-    rating = row.get("rating") or 0
-    return price_diff - rating * 100
+    price_diff = avg - daily_budget
+    if price_diff <= 0:
+        return -((row.get("rating") or 0) * 100)
+    return price_diff - (row.get("rating") or 0) * 50
 
 
-def _pick(places: list[dict], count: int, target_score: float) -> list[dict]:
+def _pick(places: list[dict], count: int, target_score: float, daily_budget: int = None) -> list[dict]:
     pool = [p for p in places if _budget_score(p.get("budget_level", "")) <= target_score + 1]
+    if daily_budget:
+        budget_pool = [p for p in pool if (p.get("budget_range_min") or 0) <= daily_budget * 0.8]
+        if budget_pool:
+            pool = budget_pool
+    if not pool:
+        pool = [p for p in places if (p.get("budget_range_min") or 0) <= (daily_budget or 99999)]
     if not pool:
         pool = places
     sorted_pool = sorted(pool, key=lambda p: -(p.get("rating") or 0))
@@ -78,7 +85,7 @@ def render_budget_plan(context: list[dict], total_budget: int, days: int,
 
     # ---- Select hotel ----
     affordable_hotels = sorted(
-        [h for h in hotels if h.get("budget_range_max") and h["budget_range_max"] <= daily_budget * 2],
+        [h for h in hotels if h.get("budget_range_min") and h["budget_range_min"] <= daily_budget * 1.2],
         key=lambda h: _hotel_fit_score(h, daily_budget, target_score)
     )
     chosen_hotel = affordable_hotels[0] if affordable_hotels else (
@@ -93,10 +100,10 @@ def render_budget_plan(context: list[dict], total_budget: int, days: int,
         lines.append("")
 
     # ---- Select places across categories ----
-    rest_selected = _pick(restaurants, 5, target_score)
-    attr_selected = _pick(attractions, 5, target_score)
-    cafe_selected = _pick(cafes, 1, target_score)
-    night_selected = _pick(nightlife, 3, target_score)
+    rest_selected = _pick(restaurants, 5, target_score, daily_budget)
+    attr_selected = _pick(attractions, 5, target_score, daily_budget)
+    cafe_selected = _pick(cafes, 1, target_score, daily_budget)
+    night_selected = _pick(nightlife, 3, target_score, daily_budget)
 
     if not rest_selected:
         rest_selected = sorted(restaurants, key=lambda r: -(r.get("rating") or 0))[:5]
