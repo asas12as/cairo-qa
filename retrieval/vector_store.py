@@ -49,16 +49,21 @@ class VectorStore:
         for p in places:
             doc = " | ".join(filter(None, [
                 p.get("name", ""),
+                p.get("category", ""),
                 p.get("genre_type", ""),
                 p.get("neighborhood", ""),
+                p.get("address", ""),
+                p.get("budget_level", ""),
                 p.get("notes", ""),
             ]))
             ids.append(str(p["id"]))
             metadatas.append({
+                "id": p["id"],
                 "name": p.get("name", ""),
                 "category": p.get("category", ""),
+                "genre_type": p.get("genre_type", ""),
                 "neighborhood": p.get("neighborhood", ""),
-                "id": p["id"],
+                "budget_level": p.get("budget_level", ""),
             })
             documents.append(doc)
 
@@ -68,11 +73,14 @@ class VectorStore:
             metadatas=metadatas,
         )
 
-    def search(self, query: str, n_results: int = 10) -> list[dict]:
+    def search(self, query: str, n_results: int = 10, where: dict | None = None) -> list[dict]:
         results = self.collection.query(
             query_texts=[query],
             n_results=n_results,
+            where=where,
         )
+        if not results["ids"] or not results["ids"][0]:
+            return []
         rows = []
         for i in range(len(results["ids"][0])):
             meta = results["metadatas"][0][i]
@@ -81,6 +89,8 @@ class VectorStore:
                 "name": meta.get("name", ""),
                 "category": meta.get("category", ""),
                 "neighborhood": meta.get("neighborhood", ""),
+                "genre_type": meta.get("genre_type", ""),
+                "budget_level": meta.get("budget_level", ""),
                 "document": results["documents"][0][i],
                 "distance": results["distances"][0][i] if results.get("distances") else None,
             })

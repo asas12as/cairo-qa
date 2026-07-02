@@ -1,5 +1,36 @@
+from core import ctx
 from retrieval.structured_db import StructuredDB
 from retrieval.vector_store import VectorStore
+
+
+_RRF_K = 60
+
+
+def _rrf(ranked_lists: list[list[dict]]) -> list[dict]:
+    scores = {}
+    for rank_list in ranked_lists:
+        for rank, item in enumerate(rank_list):
+            item_id = item["id"]
+            scores.setdefault(item_id, {"score": 0, "item": item})
+            scores[item_id]["score"] += 1 / (_RRF_K + rank + 1)
+    ranked = sorted(scores.values(), key=lambda x: -x["score"])
+    return [r["item"] for r in ranked]
+
+
+def _build_chroma_where(sql_filters: dict | None) -> dict | None:
+    """Convert DuckDB-style filters to ChromaDB metadata where clause."""
+    if not sql_filters:
+        return None
+    parts = {}
+    if sql_filters.get("category"):
+        parts["category"] = sql_filters["category"].lower()
+    if sql_filters.get("neighborhood"):
+        parts["neighborhood"] = sql_filters["neighborhood"].lower()
+    if sql_filters.get("budget_level"):
+        parts["budget_level"] = sql_filters["budget_level"].lower()
+    if not parts:
+        return None
+    return {k: {"$eq": v} for k, v in parts.items()}
 
 
 class HybridRetriever:
@@ -18,30 +49,26 @@ class HybridRetriever:
         if result_type == "semantic":
             if not semantic_query:
                 return []
-            vector_results = self.vector_store.search(semantic_query, limit * 2)
+            chroma_where = _build_chroma_where(filters)
+            vector_results = self.vector_store.search(semantic_query, limit * 2, where=chroma_where)
             ids = [r["id"] for r in vector_results]
             if ids:
                 return self.structured_db.query({"ids": ids}, limit)
             return []
 
         structured = self.structured_db.query(filters, limit)
-        existing_ids = {r["id"] for r in structured}
+        semantic = []
+        if semantic_query:
+            chroma_where = _build_chroma_where(filters)
+            vector_results = self.vector_store.search(semantic_query, limit * 2, where=chroma_where)
+            if vector_results:
+                ids = [r["id"] for r in vector_results]
+                semantic = self.structured_db.query({"ids": ids}, limit * 2)
 
-        if semantic_query and len(structured) < limit:
-            vector_results = self.vector_store.search(semantic_query, limit * 2)
-            extra_ids = [r["id"] for r in vector_results if r["id"] not in existing_ids]
-            if extra_ids:
-                extra_rows = self.structured_db.query({"ids": extra_ids[:limit]}, limit)
-                if filters.get("neighborhood"):
-                    hood = filters["neighborhood"].lower()
-                    extra_rows = [r for r in extra_rows if hood in (r.get("neighborhood") or "").lower()]
-                if filters.get("category"):
-                    cat = filters["category"].lower()
-                    extra_rows = [r for r in extra_rows if cat in (r.get("category") or "").lower()]
-                seen = existing_ids.copy()
-                for r in extra_rows:
-                    if r["id"] not in seen:
-                        structured.append(r)
-                        seen.add(r["id"])
+        merged = _rrf([structured, semantic])[:limit]
 
-        return structured[:limit]
+        reranker = getattr(ctx, "reranker", None)
+        if reranker and semantic_query and len(merged) > 3:
+            merged = reranker.rerank(semantic_query, merged, top_k=limit)
+
+        return merged[:limit]

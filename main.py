@@ -92,6 +92,11 @@ def main():
     ctx.prefs = UserPreferences(data_path("user_profiles"))
     ctx.memory = ConversationMemory(DATA_DIR)
 
+    print("Loading reranker...")
+    from models.reranker import Reranker
+    ctx.reranker = Reranker()
+    print("  Reranker loaded.")
+
     app = FastAPI(title="Cairo Places QA", version="1.0.0")
 
     @app.get("/health")

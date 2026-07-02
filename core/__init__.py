@@ -25,6 +25,7 @@ class AppContext:
         self.logger = None
         self.prefs = None
         self.memory = None
+        self.reranker = None
         self.config_path: str | None = None
 
 

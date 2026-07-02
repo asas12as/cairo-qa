@@ -8,6 +8,38 @@ from models.schemas import AskResponse, PlaceInfo
 from core import ctx
 
 
+_RRF_K = 60
+
+
+def _rrf(ranked_lists: list[list[dict]]) -> list[dict]:
+    scores = {}
+    for rank_list in ranked_lists:
+        for rank, item in enumerate(rank_list):
+            item_id = item["id"]
+            scores.setdefault(item_id, {"score": 0, "item": item})
+            scores[item_id]["score"] += 1 / (_RRF_K + rank + 1)
+    ranked = sorted(scores.values(), key=lambda x: -x["score"])
+    return [r["item"] for r in ranked]
+
+
+def _expand_query(question: str, semantic_query: str) -> list[str]:
+    """Generate query variations using the LLM for better recall."""
+    if not semantic_query:
+        return [question]
+    messages = [
+        {"role": "system", "content": "Rephrase the search query 3 ways to help find matching places. Return only the rephrases, one per line, no numbering."},
+        {"role": "user", "content": f"Query: {semantic_query}"},
+    ]
+    try:
+        raw = ctx.llm.chat(messages, max_tokens=120, temperature=0.3)
+        variations = [q.strip() for q in raw.strip().split("\n") if q.strip()]
+        all_queries = [semantic_query] + variations[:3]
+        seen = set()
+        return [q for q in all_queries if q.lower() not in seen and not seen.add(q.lower())]
+    except Exception:
+        return [semantic_query]
+
+
 def _to_place_info(row: dict) -> PlaceInfo:
     return PlaceInfo(
         name=row.get("name", "N/A"),
@@ -114,7 +146,13 @@ def handle_question(user_id: str | None, question: str, companion_ids: list[str]
     if route_info.get("_is_plan"):
         context = _get_plan_context()
     else:
-        context = ctx.retriever.retrieve(route_info, limit=5)
+        queries = _expand_query(question, route_info.get("semantic_query", ""))
+        all_results = []
+        for q in queries:
+            ri = dict(route_info)
+            ri["semantic_query"] = q
+            all_results.append(ctx.retriever.retrieve(ri, limit=5))
+        context = _rrf(all_results)[:5]
 
     mismatch = _context_matches_filters(context, route_info.get("filters", {}))
     if mismatch:
@@ -169,7 +207,13 @@ def handle_question_stream(user_id: str | None, question: str, companion_ids: li
     if route_info.get("_is_plan"):
         context = _get_plan_context()
     else:
-        context = ctx.retriever.retrieve(route_info, limit=5)
+        queries = _expand_query(question, route_info.get("semantic_query", ""))
+        all_results = []
+        for q in queries:
+            ri = dict(route_info)
+            ri["semantic_query"] = q
+            all_results.append(ctx.retriever.retrieve(ri, limit=5))
+        context = _rrf(all_results)[:5]
 
     mismatch = _context_matches_filters(context, route_info.get("filters", {}))
     if mismatch:
