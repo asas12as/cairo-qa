@@ -143,14 +143,15 @@ def handle_question(user_id: str | None, question: str, companion_ids: list[str]
                 route_info["_budget"] = acc_budget
             if route_info.get("_days") is None and acc_days is not None:
                 route_info["_days"] = acc_days
-            if route_info.get("_is_daily_budget") and route_info.get("_days") and route_info.get("_budget"):
-                route_info["_budget"] = route_info["_budget"] * route_info["_days"]
-                route_info["_is_daily_budget"] = False
         else:
             if acc_budget is not None and acc_days is not None:
                 route_info["_is_plan"] = True
                 route_info["_budget"] = acc_budget
                 route_info["_days"] = acc_days
+
+        if route_info.get("_is_daily_budget") and route_info.get("_days") and route_info.get("_budget"):
+            route_info["_budget"] = route_info["_budget"] * route_info["_days"]
+            route_info["_is_daily_budget"] = False
 
     if route_info.get("_is_plan"):
         context = _get_plan_context()
@@ -213,14 +214,15 @@ def handle_question_stream(user_id: str | None, question: str, companion_ids: li
                 route_info["_budget"] = acc_budget
             if route_info.get("_days") is None and acc_days is not None:
                 route_info["_days"] = acc_days
-            if route_info.get("_is_daily_budget") and route_info.get("_days") and route_info.get("_budget"):
-                route_info["_budget"] = route_info["_budget"] * route_info["_days"]
-                route_info["_is_daily_budget"] = False
         else:
             if acc_budget is not None and acc_days is not None:
                 route_info["_is_plan"] = True
                 route_info["_budget"] = acc_budget
                 route_info["_days"] = acc_days
+
+        if route_info.get("_is_daily_budget") and route_info.get("_days") and route_info.get("_budget"):
+            route_info["_budget"] = route_info["_budget"] * route_info["_days"]
+            route_info["_is_daily_budget"] = False
 
     if route_info.get("_is_plan"):
         context = _get_plan_context()
