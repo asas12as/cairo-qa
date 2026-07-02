@@ -27,7 +27,7 @@ GENRE_KEYWORDS = {
 }
 
 BUDGET_PATTERN = re.compile(r"(\d+)\s*-?\s*(?:egp|le|pounds?|usd)", re.IGNORECASE)
-DAILY_BUDGET_PATTERN = re.compile(r"(?:daily|per\s*day|/day|per\s*person\s*per\s*day)\s*(?:budget\s*)?(?:of\s*)?(\d+)", re.IGNORECASE)
+DAILY_BUDGET_PATTERN = re.compile(r"(?:daily|per\s*day|/day|a\s*day|per\s*person\s*per\s*day|فاليوم|في\s*اليوم|في\s*اليوم\s*الواحد)\s*(?:budget\s*)?(?:of\s*)?(\d+)|(\d+)\s*(?:per\s*day|/day|a\s*day|فاليوم|في\s*اليوم)", re.IGNORECASE)
 RATING_PATTERN = re.compile(r"(?:rating|rated|stars?)\s*(?:of\s*)?(\d+(?:\.\d+)?)", re.IGNORECASE)
 DAYS_PATTERN = re.compile(r"(\d+)\s*-?\s*(?:days?|nights?)", re.IGNORECASE)
 
@@ -40,9 +40,10 @@ ARABIC_BARE_BUDGET = re.compile(r"(\d+)\s*(?:جنيه|جنية|جم|EGP)", re.IG
 
 # Arabic patterns
 ARABIC_DIGITS = str.maketrans("٠١٢٣٤٥٦٧٨٩", "0123456789")
-ARABIC_DAYS = re.compile(r"(?:يوم|ايام|ليلة|ليالي)", re.IGNORECASE)
-ARABIC_BUDGET = re.compile(r"(\d+)\s*(?:جنيه|جنية|جم)", re.IGNORECASE)
+ARABIC_DAYS = re.compile(r"(?:^|\s|و)(?:يوم|ايام|ليلة|ليالي)(?:\s|$|,|\.)", re.IGNORECASE)
+ARABIC_BUDGET = re.compile(r"(\d+)\s*(?:جنيه|جنية|جم|فاليوم|في\s*اليوم)", re.IGNORECASE)
 ARABIC_PLAN = re.compile(r"(?:رحلة|خطة| itinerary|برنامج)", re.IGNORECASE)
+ARABIC_DAILY_BUDGET = re.compile(r"(\d+)\s*(?:فاليوم|في\s*اليوم|في\s*اليوم\s*الواحد)", re.IGNORECASE)
 
 PLAN_KEYWORDS = {"plan", "itinerary", "trip", "schedule", "tour"}
 
@@ -144,14 +145,24 @@ class QueryRouter:
         elif ARABIC_DAYS.search(q_norm):
             day_match = ARABIC_DAYS.search(q_norm)
             before = q_norm[:day_match.start()]
-            digits = re.findall(r"(\d+)", before)
-            if digits:
-                days_val = int(digits[-1])
+            digit_matches = re.findall(r"(\d+)", before)
+            if digit_matches:
+                candidate_days = int(digit_matches[-1])
+                if ARABIC_DAILY_BUDGET.search(q_norm):
+                    daily_m = ARABIC_DAILY_BUDGET.search(q_norm)
+                    daily_val = int(daily_m.group(1))
+                    if daily_val == candidate_days:
+                        candidate_days = None
+                if candidate_days and candidate_days <= 365:
+                    days_val = candidate_days
 
         # Plan detection
         if budget_val is not None and days_val is not None:
-            daily_m = DAILY_BUDGET_PATTERN.search(q_norm)
-            if daily_m and int(daily_m.group(1)) == budget_val:
+            daily_m = DAILY_BUDGET_PATTERN.search(q_norm) or ARABIC_DAILY_BUDGET.search(q_norm)
+            daily_match_val = None
+            if daily_m:
+                daily_match_val = int(daily_m.group(1) or daily_m.group(2) or 0)
+            if daily_match_val == budget_val:
                 budget_val = budget_val * days_val
 
         has_plan_kw = any(kw in q_lower for kw in PLAN_KEYWORDS) or bool(ARABIC_PLAN.search(q_norm))
